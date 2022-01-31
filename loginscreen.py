@@ -5,13 +5,13 @@ class Login:
     def __init__(self,window):
         window = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 
-        run = True
+        self.run = True
 
-        while run:
+        while self.run:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    run = False
+                    self.run = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    run = False
+                    self.run = False
             window.fill((255,0,0))
             pygame.display.update()

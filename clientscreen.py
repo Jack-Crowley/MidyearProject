@@ -6,5 +6,7 @@ window = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 
 Login(window)
 Chatroom(window)
+Login(window)
+Chatroom(window)
 
 pygame.display.quit()
