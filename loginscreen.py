@@ -23,17 +23,21 @@ class Login:
                     mousex,mousey = pygame.mouse.get_pos()
                     for button in self.clickables:
                         button.deactivate()
+                        button.active = False
                         button.color = (17,17,17)
                         if button.click(mousex,mousey):
                             if button.command == "input_field":
                                 button.activate()
                                 self.active = button
+                                button.active = True
                                 button.color = (35,35,35)
                 if event.type == pygame.KEYDOWN:
                     if self.active != None:
                         if event.key == pygame.K_BACKSPACE:
                             self.active.delChar()
-                        elif event.unicode in "`123f4567890-=~!@#$% ^&*()_+qwertyuiop[]\\asdghjkl'zcbn,./ZXCVBNM<>?ASDFGHJKL:\"QWERTYUIOP{}|m":
+                        elif event.key == pygame.K_LEFT:
+                            self.active.moveCursorLeft()
+                        elif event.unicode in "`123f4567890-=~!@#$% ^&*()_+qwertyuiop[]\\asdghjxkl'zcbn,./ZXCVBNM<>?ASDFGHJKL:\"QWERTYUIOP{}|m":
                             self.active.addChar(event.unicode)
                             
             
@@ -46,9 +50,9 @@ class Login:
         self.drawables.append(Text("Orbitron",(2,217,198),"LOG IN TO CONTINUE",self.window,960,350,self.pixelratio,75))
         self.drawables.append(Rectangle(726,550,468,15,(2,217,198),self.window,self.pixelratio))
         self.drawables.append(Image("Images\purple_log_header.png",390,10,150,150,self.window,self.pixelratio))
-        self.createInputField(726,475,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter Username...")
+        self.createInputField(726,475,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter Username...",(193,146,252))
 
-        self.createInputField(726,600,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter Password...")
+        self.createInputField(726,600,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter Password...",(193,146,252))
         self.drawables.append(Rectangle(726,675,468,15,(2,217,198),self.window,self.pixelratio))
 
     def createButton(self,x,y,width,height,color,window,pixelratio,command):
@@ -56,8 +60,8 @@ class Login:
         self.drawables.append(tempButton)
         self.clickables.append(tempButton)
 
-    def createInputField(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage):
-        tempInputField = InputField(x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,)
+    def createInputField(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor):
+        tempInputField = InputField(x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor)
         self.drawables.append(tempInputField)
         self.clickables.append(tempInputField)
 
