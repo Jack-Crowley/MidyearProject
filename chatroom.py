@@ -2,7 +2,7 @@ import pygame
 
 class Chatroom:
     def __init__(self, window):
-        window = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+        self.window = window
 
         self.run = True
         
