@@ -7,6 +7,5 @@ window = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 pygame.font.init()
 
 Login(window)
-Chatroom(window)
-
+Chatroom(window)    
 pygame.display.quit()

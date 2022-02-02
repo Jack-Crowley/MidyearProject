@@ -31,24 +31,28 @@ class Button:
         return False
 
 class InputField:
-    def __init__(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage=""):
+    def __init__(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor):
         self.x=x/pixelratio
         self.y=y/pixelratio
         self.width=width/pixelratio
         self.height=height/pixelratio
         self.color=color
         self.window=window
+        self.active = False
         self.command = command
         self.textcolor = textcolor
         self.emptyMessage=emptyMessage
         self.textMessage = emptyMessage
-        self.tempMessage = ""
+        self.cursorColor = cursorColor
+        self.cursorIndex = 0
         self.mode = mode
         self.currentIndex = 0
+        self.maxCurrentIndex = len(self.textMessage)
         self.changeText()
     
     def draw(self):
         pygame.draw.rect(self.window,self.color,(self.x,self.y,self.width,self.height))
+        self.updateCursor()
         self.window.blit(self.textObject,(self.x,self.y+(self.textObject.get_height()//2)))
     
     def click(self,mx,my):
@@ -69,21 +73,41 @@ class InputField:
     def activate(self):
         if self.textMessage == self.emptyMessage:
             self.textMessage = ""
+            self.maxCurrentIndex = 0
         self.changeText()
     
     def deactivate(self):
         if self.textMessage == "":
             self.textMessage = self.emptyMessage
+            self.maxCurrentIndex = len(self.textMessage)
         self.changeText()
 
     def addChar(self,char):
-        self.textMessage += char
-
+        self.textMessage = self.textMessage[:self.cursorIndex] + char + self.textMessage[self.cursorIndex:]
+        self.cursorIndex+=1
+        self.maxCurrentIndex += 1
         self.changeText()
-        
+
+    def moveCursorLeft(self):
+        if self.cursorIndex > 0:
+            self.cursorIndex -= 1
+        if self.cursorIndex < self.currentIndex:
+                self.currentIndex-=1
+                self.changeText()
+
+    def updateCursor(self):
+        if self.active:
+            if self.cursorIndex > len(self.textMessage):
+                self.cursorIndex = len(self.textMessage)
+            self.cursorText = pygame.font.SysFont("Orbitron", int(self.height))
+            self.cursorTextObject = self.cursorText.render(self.textMessage[self.currentIndex:self.cursorIndex], False, self.cursorColor)
+            pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
+            
     
     def delChar(self):
-        self.textMessage = self.textMessage[:-1]
+        self.textMessage = self.textMessage[:self.cursorIndex-1] + self.textMessage[self.cursorIndex:]
+        if self.cursorIndex > 0:
+            self.cursorIndex-=1
         while self.textObject.get_width() < self.width - 5:
                 self.currentIndex-=1
                 self.newText = pygame.font.SysFont("Orbitron", int(self.height))
