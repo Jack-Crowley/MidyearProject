@@ -3,7 +3,7 @@ import errno
 
 HEADER = 16
 PORT = 8080
-IP = socket.gethostbyname('LAPTOP-I3NGMCO0')
+IP = '172.31.86.81'
 ADDR = (IP, PORT)
 FORMAT = 'utf-8'
 
