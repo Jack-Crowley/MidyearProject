@@ -152,6 +152,3 @@ class Text:
         self.newText = pygame.font.SysFont(self.font, int(self.size))
         self.textObject = self.newText.render(newMessage, False, self.color)
         self.message = newMessage
-
-    
-    
