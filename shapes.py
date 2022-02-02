@@ -68,6 +68,18 @@ class InputField:
                 self.currentIndex+=1
                 self.newText = pygame.font.SysFont("Orbitron", int(self.height))
                 self.textObject = self.newText.render(self.textMessage[self.currentIndex:], False, self.textcolor)
+        elif self.mode == "password":
+            if self.textMessage != self.emptyMessage:
+                self.newText = pygame.font.SysFont("Orbitron", int(self.height))
+                self.textObject = self.newText.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
+                while self.textObject.get_width() > self.width - 5:
+                    self.currentIndex+=1
+                    self.newText = pygame.font.SysFont("Orbitron", int(self.height))
+                    self.textObject = self.newText.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
+            else:
+                self.newText = pygame.font.SysFont("Orbitron", int(self.height))
+                self.textObject = self.newText.render(self.textMessage[self.currentIndex:], False, self.textcolor)
+            
         
 
     def activate(self):
@@ -97,16 +109,27 @@ class InputField:
 
     def updateCursor(self):
         if self.active:
-            if self.cursorIndex > len(self.textMessage):
-                self.cursorIndex = len(self.textMessage)
-            self.cursorText = pygame.font.SysFont("Orbitron", int(self.height))
-            self.cursorTextObject = self.cursorText.render(self.textMessage[self.currentIndex:self.cursorIndex], False, self.cursorColor)
-            pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
+            if self.mode == "scroll":
+                if self.cursorIndex < 0:
+                    self.cursorIndex = 0
+                if self.cursorIndex > len(self.textMessage):
+                    self.cursorIndex = len(self.textMessage)
+                self.cursorText = pygame.font.SysFont("Orbitron", int(self.height))
+                self.cursorTextObject = self.cursorText.render(self.textMessage[self.currentIndex:self.cursorIndex], False, self.cursorColor)
+                pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
+            elif self.mode == "password":
+                if self.cursorIndex < 0:
+                    self.cursorIndex = 0
+                if self.cursorIndex > len(self.textMessage):
+                    self.cursorIndex = len(self.textMessage)
+                self.cursorText = pygame.font.SysFont("Orbitron", int(self.height))
+                self.cursorTextObject = self.cursorText.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
+                pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
             
     
     def delChar(self):
-        self.textMessage = self.textMessage[:self.cursorIndex-1] + self.textMessage[self.cursorIndex:]
         if self.cursorIndex > 0:
+            self.textMessage = self.textMessage[:self.cursorIndex-1] + self.textMessage[self.cursorIndex:]
             self.cursorIndex-=1
         while self.textObject.get_width() < self.width - 5:
                 self.currentIndex-=1

@@ -22,15 +22,17 @@ class Login:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousex,mousey = pygame.mouse.get_pos()
                     for button in self.clickables:
-                        button.deactivate()
-                        button.active = False
-                        button.color = (17,17,17)
                         if button.click(mousex,mousey):
                             if button.command == "input_field":
+                                button.deactivate()
+                                button.active = False
+                                button.color = (17,17,17)
                                 button.activate()
                                 self.active = button
                                 button.active = True
                                 button.color = (35,35,35)
+                            elif button.command == "new_screen":
+                                self.run = False
                 if event.type == pygame.KEYDOWN:
                     if self.active != None:
                         if event.key == pygame.K_BACKSPACE:
@@ -52,8 +54,11 @@ class Login:
         self.drawables.append(Image("Images\purple_log_header.png",390,10,150,150,self.window,self.pixelratio))
         self.createInputField(726,475,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter Username...",(193,146,252))
 
-        self.createInputField(726,600,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter Password...",(193,146,252))
+        self.createInputField(726,600,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"password","Enter Password...",(193,146,252))
         self.drawables.append(Rectangle(726,675,468,15,(2,217,198),self.window,self.pixelratio))
+
+        self.createButton(726,825,468,75,(193,146,252),self.window,self.pixelratio,command="new_screen")
+        self.drawables.append(Text("Orbitron",(255,255,255), "LOGIN",self.window,960,862,self.pixelratio,75))
 
     def createButton(self,x,y,width,height,color,window,pixelratio,command):
         tempButton = Button(x,y,width,height,color,window,pixelratio,command)
