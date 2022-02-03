@@ -31,24 +31,32 @@ class Button:
         return False
 
 class InputField:
-    def __init__(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage=""):
+    def __init__(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars):
         self.x=x/pixelratio
         self.y=y/pixelratio
         self.width=width/pixelratio
         self.height=height/pixelratio
         self.color=color
         self.window=window
+        self.active = False
         self.command = command
         self.textcolor = textcolor
         self.emptyMessage=emptyMessage
         self.textMessage = emptyMessage
-        self.tempMessage = ""
+        self.cursorColor = cursorColor
+        self.cursorIndex = 0
         self.mode = mode
         self.currentIndex = 0
+        self.maxCurrentIndex = len(self.textMessage)
+        self.lettercounter = {char:0 for char in validChars}
+        self.lettervelocity = {char:1 for char in validChars}
+        self.backspacecounter = 0
+        self.backspacevelocity = 1
         self.changeText()
     
     def draw(self):
         pygame.draw.rect(self.window,self.color,(self.x,self.y,self.width,self.height))
+        self.updateCursor()
         self.window.blit(self.textObject,(self.x,self.y+(self.textObject.get_height()//2)))
     
     def click(self,mx,my):
@@ -64,26 +72,69 @@ class InputField:
                 self.currentIndex+=1
                 self.newText = pygame.font.SysFont("Orbitron", int(self.height))
                 self.textObject = self.newText.render(self.textMessage[self.currentIndex:], False, self.textcolor)
+        elif self.mode == "password":
+            if self.textMessage != self.emptyMessage:
+                self.newText = pygame.font.SysFont("Orbitron", int(self.height))
+                self.textObject = self.newText.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
+                while self.textObject.get_width() > self.width - 5:
+                    self.currentIndex+=1
+                    self.newText = pygame.font.SysFont("Orbitron", int(self.height))
+                    self.textObject = self.newText.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
+            else:
+                self.newText = pygame.font.SysFont("Orbitron", int(self.height))
+                self.textObject = self.newText.render(self.textMessage[self.currentIndex:], False, self.textcolor)
+            
         
 
     def activate(self):
         if self.textMessage == self.emptyMessage:
             self.textMessage = ""
+            self.maxCurrentIndex = 0
         self.changeText()
     
     def deactivate(self):
         if self.textMessage == "":
             self.textMessage = self.emptyMessage
+            self.maxCurrentIndex = len(self.textMessage)
         self.changeText()
 
     def addChar(self,char):
-        self.textMessage += char
-
+        self.textMessage = self.textMessage[:self.cursorIndex] + char + self.textMessage[self.cursorIndex:]
+        self.cursorIndex+=1
+        self.maxCurrentIndex += 1
         self.changeText()
-        
+
+    def moveCursorLeft(self):
+        if self.cursorIndex > 0:
+            self.cursorIndex -= 1
+        if self.cursorIndex < self.currentIndex:
+                self.currentIndex-=1
+                self.changeText()
+
+    def updateCursor(self):
+        if self.active:
+            if self.mode == "scroll":
+                if self.cursorIndex < 0:
+                    self.cursorIndex = 0
+                if self.cursorIndex > len(self.textMessage):
+                    self.cursorIndex = len(self.textMessage)
+                self.cursorText = pygame.font.SysFont("Orbitron", int(self.height))
+                self.cursorTextObject = self.cursorText.render(self.textMessage[self.currentIndex:self.cursorIndex], False, self.cursorColor)
+                pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
+            elif self.mode == "password":
+                if self.cursorIndex < 0:
+                    self.cursorIndex = 0
+                if self.cursorIndex > len(self.textMessage):
+                    self.cursorIndex = len(self.textMessage)
+                self.cursorText = pygame.font.SysFont("Orbitron", int(self.height))
+                self.cursorTextObject = self.cursorText.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
+                pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
+            
     
     def delChar(self):
-        self.textMessage = self.textMessage[:-1]
+        if self.cursorIndex > 0:
+            self.textMessage = self.textMessage[:self.cursorIndex-1] + self.textMessage[self.cursorIndex:]
+            self.cursorIndex-=1
         while self.textObject.get_width() < self.width - 5:
                 self.currentIndex-=1
                 self.newText = pygame.font.SysFont("Orbitron", int(self.height))
@@ -92,6 +143,20 @@ class InputField:
                     self.currentIndex=0
                     break
         self.changeText()
+    
+    def backspace(self):
+        self.backspacecounter += 0.1*self.backspacevelocity
+        if self.backspacecounter > 1:
+            self.backspacecounter = 0
+            self.backspacevelocity += 0.5
+            self.delChar()
+    
+    def letter(self,char):
+        self.lettercounter[char] += 0.05*self.lettervelocity[char]
+        if self.lettercounter[char] > 1:
+            self.lettercounter[char] = 0
+            self.lettervelocity[char] += 0.5
+            self.addChar(char)
 
 class Image:
     def __init__(self,filepath,x,y,width,height,window,pixelratio):
@@ -128,6 +193,3 @@ class Text:
         self.newText = pygame.font.SysFont(self.font, int(self.size))
         self.textObject = self.newText.render(newMessage, False, self.color)
         self.message = newMessage
-
-    
-    
