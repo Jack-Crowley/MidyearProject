@@ -186,7 +186,7 @@ class Image:
         self.height = height/pixelratio
         self.window = window
         self.image = pygame.image.load(self.filepath)
-        self.image = pygame.transform.scale(self.image, (self.width,self.height))
+        self.image = pygame.transform.scale(self.image, (int(self.width),int(self.height)))
     
     def draw(self):
         self.window.blit(self.image,(self.x,self.y))
