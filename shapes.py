@@ -80,7 +80,7 @@ class InputField:
             if self.textMessage != self.emptyMessage:
                 self.textObject = self.text.render(len(self.textMessage[self.currentIndex:self.maxCurrentIndex])*"*", False, self.textcolor)
                 while self.textObject.get_width() > self.width - 5:
-                    self.currentIndex+=1 
+                    self.currentIndex+=1
                     self.textObject = self.text.render(len(self.textMessage[self.currentIndex:self.maxCurrentIndex])*"*", False, self.textcolor)
             else:
                 self.textObject = self.text.render(self.textMessage[self.currentIndex:self.maxCurrentIndex], False, self.textcolor)
@@ -131,9 +131,8 @@ class InputField:
                     self.cursorIndex = 0
                 if self.cursorIndex > len(self.textMessage):
                     self.cursorIndex = len(self.textMessage)
-                self.cursorTextObject = self.text.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
+                self.cursorTextObject = self.text.render(len(self.textMessage[self.currentIndex:self.cursorIndex])*"*", False, self.cursorColor)
                 pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
-            
     
     def delChar(self):
         if self.cursorIndex > 0:

@@ -8,6 +8,9 @@ class Login:
         self.window = window
         self.clock = clock
 
+        self.username = None
+        self.password = None
+
         self.MWIDTH, self.MHEIGHT = self.window.get_size()
         self.pixelratio = 1920/self.MWIDTH
 
@@ -38,6 +41,8 @@ class Login:
                                     button.color = (35,35,35)
                         elif button.command == "new_screen":
                             if button.click(mousex,mousey):
+                                    print(self.username.textMessage)
+                                    print(self.password.textMessage)
                                     self.run = False
                 if self.active != None:
                     if event.type == pygame.KEYDOWN:
@@ -98,6 +103,10 @@ class Login:
         tempInputField = InputField(x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars)
         self.drawables.append(tempInputField)
         self.clickables.append(tempInputField)
+        if y == 600:
+            self.password = tempInputField
+        else:
+            self.username = tempInputField
 
 
     def draw(self):
