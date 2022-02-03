@@ -39,8 +39,11 @@ def handle_client(conn, addr):
             user = clients[conn]
             for client_socket in clients:
                 if client_socket != conn:
-                    client_socket.send(user['header'] + user['data'] + f'{msg_len:<{HEADER}}'.encode(FORMAT) + msg.encode(FORMAT))
-                    print(msg)
+                    try:
+                        client_socket.send(user['header'] + user['data'] + f'{msg_len:<{HEADER}}'.encode(FORMAT) + msg.encode(FORMAT))
+                        print(msg)
+                    except:
+                        del clients[client_socket]
         else:
             connected = False
     
