@@ -47,16 +47,22 @@ class InputField:
         self.cursorIndex = 0
         self.mode = mode
         self.currentIndex = 0
-        self.maxCurrentIndex = len(self.textMessage)
+        self.maxCurrentIndex = -1
         self.lettercounter = {char:0 for char in validChars}
         self.lettervelocity = {char:1 for char in validChars}
         self.backspacecounter = 0
         self.backspacevelocity = 1
+        self.leftarrowvelocity = 1
+        self.leftarrowcount = 0
+        self.rightarrowcount = 0
+        self.rightarrowvecolicty = 1
+        self.text = pygame.font.SysFont("Orbitron", int(self.height))
         self.changeText()
     
     def draw(self):
         pygame.draw.rect(self.window,self.color,(self.x,self.y,self.width,self.height))
         self.updateCursor()
+        self.changeText()
         self.window.blit(self.textObject,(self.x,self.y+(self.textObject.get_height()//2)))
     
     def click(self,mx,my):
@@ -66,23 +72,18 @@ class InputField:
     
     def changeText(self):
         if self.mode == "scroll":
-            self.newText = pygame.font.SysFont("Orbitron", int(self.height))
-            self.textObject = self.newText.render(self.textMessage[self.currentIndex:], False, self.textcolor)
+            self.textObject = self.text.render(self.textMessage[self.currentIndex:self.maxCurrentIndex], False, self.textcolor)
             while self.textObject.get_width() > self.width - 5:
                 self.currentIndex+=1
-                self.newText = pygame.font.SysFont("Orbitron", int(self.height))
-                self.textObject = self.newText.render(self.textMessage[self.currentIndex:], False, self.textcolor)
+                self.textObject = self.text.render(self.textMessage[self.currentIndex:self.maxCurrentIndex], False, self.textcolor)
         elif self.mode == "password":
             if self.textMessage != self.emptyMessage:
-                self.newText = pygame.font.SysFont("Orbitron", int(self.height))
-                self.textObject = self.newText.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
+                self.textObject = self.text.render(len(self.textMessage[self.currentIndex:self.maxCurrentIndex])*"*", False, self.textcolor)
                 while self.textObject.get_width() > self.width - 5:
-                    self.currentIndex+=1
-                    self.newText = pygame.font.SysFont("Orbitron", int(self.height))
-                    self.textObject = self.newText.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
+                    self.currentIndex+=1 
+                    self.textObject = self.text.render(len(self.textMessage[self.currentIndex:self.maxCurrentIndex])*"*", False, self.textcolor)
             else:
-                self.newText = pygame.font.SysFont("Orbitron", int(self.height))
-                self.textObject = self.newText.render(self.textMessage[self.currentIndex:], False, self.textcolor)
+                self.textObject = self.text.render(self.textMessage[self.currentIndex:self.maxCurrentIndex], False, self.textcolor)
             
         
 
@@ -95,7 +96,7 @@ class InputField:
     def deactivate(self):
         if self.textMessage == "":
             self.textMessage = self.emptyMessage
-            self.maxCurrentIndex = len(self.textMessage)
+            self.maxCurrentIndex = -1
         self.changeText()
 
     def addChar(self,char):
@@ -107,9 +108,14 @@ class InputField:
     def moveCursorLeft(self):
         if self.cursorIndex > 0:
             self.cursorIndex -= 1
-        if self.cursorIndex < self.currentIndex:
+        if self.cursorIndex <= self.currentIndex:
+            if self.cursorIndex > 0:
+                self.cursorIndex+=1
                 self.currentIndex-=1
-                self.changeText()
+                self.maxCurrentIndex-=1
+            self.tempText = self.text.render(self.textMessage[self.currentIndex:self.maxCurrentIndex], False, self.textcolor)
+            self.changeText()
+        self.changeText()
 
     def updateCursor(self):
         if self.active:
@@ -118,16 +124,14 @@ class InputField:
                     self.cursorIndex = 0
                 if self.cursorIndex > len(self.textMessage):
                     self.cursorIndex = len(self.textMessage)
-                self.cursorText = pygame.font.SysFont("Orbitron", int(self.height))
-                self.cursorTextObject = self.cursorText.render(self.textMessage[self.currentIndex:self.cursorIndex], False, self.cursorColor)
+                self.cursorTextObject = self.text.render(self.textMessage[self.currentIndex:self.cursorIndex], False, self.cursorColor)
                 pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
             elif self.mode == "password":
                 if self.cursorIndex < 0:
                     self.cursorIndex = 0
                 if self.cursorIndex > len(self.textMessage):
                     self.cursorIndex = len(self.textMessage)
-                self.cursorText = pygame.font.SysFont("Orbitron", int(self.height))
-                self.cursorTextObject = self.cursorText.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
+                self.cursorTextObject = self.text.render(len(self.textMessage[self.currentIndex:])*"*", False, self.textcolor)
                 pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
             
     
@@ -137,8 +141,8 @@ class InputField:
             self.cursorIndex-=1
         while self.textObject.get_width() < self.width - 5:
                 self.currentIndex-=1
-                self.newText = pygame.font.SysFont("Orbitron", int(self.height))
-                self.textObject = self.newText.render(self.textMessage[self.currentIndex:], False, self.textcolor)
+                
+                self.textObject = self.text.render(self.textMessage[self.currentIndex:], False, self.textcolor)
                 if self.currentIndex <= 0:
                     self.currentIndex=0
                     break
@@ -157,6 +161,22 @@ class InputField:
             self.lettercounter[char] = 0
             self.lettervelocity[char] += 0.5
             self.addChar(char)
+
+    def left(self):
+        self.leftarrowcount += 0.07*self.leftarrowvelocity
+        if self.leftarrowcount > 1:
+            self.leftarrowcount = 0
+            self.leftarrowvelocity += 0.5
+            self.moveCursorLeft()
+    
+    def right(self):
+        self.rightarrowcount += 0.07*self.rightarrowvecolicty
+        if self.rightarrowcount > 1:
+            self.rightarrowcount = 0
+            self.rightarrowvecolicty += 0.5
+            
+            self.addChar("")
+
 
 class Image:
     def __init__(self,filepath,x,y,width,height,window,pixelratio):

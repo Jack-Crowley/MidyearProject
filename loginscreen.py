@@ -51,12 +51,22 @@ class Login:
                         if event.key == pygame.K_BACKSPACE:
                             self.active.backspacevelocity = 1
                             self.active.backspacecounter = 0
+                        elif event.key == pygame.K_RIGHT:
+                            self.active.rightarrowcount = 0
+                            self.active.rightarrowvecolicty = 1
+                        elif event.key == pygame.K_LEFT:
+                            self.active.leftarrowcount = 0
+                            self.active.leftarrowvelocity = 1
                         elif event.unicode in self.validChars:
                             self.active.lettercounter[event.unicode] = 0
                             self.active.lettervelocity[event.unicode] = 1
             if self.active != None:
                 if keys[pygame.K_BACKSPACE]:
                     self.active.backspace()
+                if keys[pygame.K_LEFT]:
+                    self.active.left()
+                if keys[pygame.K_RIGHT]:
+                    self.active.right()
                 for i in self.validChars:
                     if keys[ord(i)]:
                         self.active.letter(i)
