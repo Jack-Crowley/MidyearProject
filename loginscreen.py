@@ -2,7 +2,7 @@ import pygame
 from shapes import *
 
 class Login:
-    def __init__(self,window,clock,pixelratio):
+    def __init__(self,window,clock,pixelratio,validChars):
         
 
         self.window = window
@@ -13,7 +13,7 @@ class Login:
 
         self.pixelratio = pixelratio
 
-        self.validChars = "`123f4567890-=~!@#$% ^&*v()_+qwertyuiop[]\\asdghjxkl'zcbn,./ZXCVBNM<>?ASDFGHJKL:;\"QWERTYUIOP{}|m"
+        self.validChars = validChars
 
         self.drawables=[]
         self.clickables = []
