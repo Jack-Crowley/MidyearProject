@@ -31,11 +31,12 @@ class Button:
         return False
 
 class InputField:
-    def __init__(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars):
+    def __init__(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size):
         self.x=x/pixelratio
         self.y=y/pixelratio
         self.width=width/pixelratio
         self.height=height/pixelratio
+        self.size = size/pixelratio
         self.color=color
         self.window=window
         self.active = False
@@ -56,14 +57,24 @@ class InputField:
         self.leftarrowcount = 0
         self.rightarrowcount = 0
         self.rightarrowvecolicty = 1
-        self.text = pygame.font.SysFont("Orbitron", int(self.height))
+        self.linecount=0
+        self.textList = []
+        self.text = pygame.font.SysFont("Orbitron", int(self.size))
         self.changeText()
     
     def draw(self):
-        pygame.draw.rect(self.window,self.color,(self.x,self.y,self.width,self.height))
-        self.updateCursor()
-        self.changeText()
-        self.window.blit(self.textObject,(self.x,self.y+(self.textObject.get_height()//2)))
+        if self.mode == "scroll" or self.mode == "password":
+            pygame.draw.rect(self.window,self.color,(self.x,self.y,self.width,self.height))
+            self.updateCursor()
+            self.changeText()
+            self.window.blit(self.textObject,(self.x,self.y+(self.textObject.get_height()//2)))
+        else:
+            pygame.draw.rect(self.window,self.color,(self.x,self.y,self.width,self.height+(self.size*self.linecount)))
+            self.updateCursor()
+            self.changeText()
+            for i in range(self.linecount):
+                self.window.blit(self.textList[i],(self.x,self.y+(i*self.size)+(self.textObject.get_height()//2)))
+            self.window.blit(self.textObject,(self.x,self.y+(self.size*self.linecount)))
     
     def click(self,mx,my):
         if self.x <= mx <= self.x+self.width and self.y <= my <= self.y+self.height:
@@ -84,7 +95,15 @@ class InputField:
                     self.textObject = self.text.render(len(self.textMessage[self.currentIndex:self.maxCurrentIndex])*"*", False, self.textcolor)
             else:
                 self.textObject = self.text.render(self.textMessage[self.currentIndex:self.maxCurrentIndex], False, self.textcolor)
-            
+        elif self.mode == "wrap":
+            self.textObject = self.text.render(self.textMessage, False, self.textcolor)
+            if self.textObject.get_width() > self.width - 5:
+                self.textList.append(self.textObject)
+                self.textMessage = ""
+                self.linecount += 1
+                self.y-=self.height
+                self.textObject = self.text.render(self.textMessage, False, self.textcolor)
+
         
 
     def activate(self):
@@ -125,14 +144,14 @@ class InputField:
                 if self.cursorIndex > len(self.textMessage):
                     self.cursorIndex = len(self.textMessage)
                 self.cursorTextObject = self.text.render(self.textMessage[self.currentIndex:self.cursorIndex], False, self.cursorColor)
-                pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
+                pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.size))
             elif self.mode == "password":
                 if self.cursorIndex < 0:
                     self.cursorIndex = 0
                 if self.cursorIndex > len(self.textMessage):
                     self.cursorIndex = len(self.textMessage)
                 self.cursorTextObject = self.text.render(len(self.textMessage[self.currentIndex:self.cursorIndex])*"*", False, self.cursorColor)
-                pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.height))
+                pygame.draw.rect(self.window,self.cursorColor,(self.x+self.cursorTextObject.get_width(),self.y,2,self.size))
     
     def delChar(self):
         if self.cursorIndex > 0:

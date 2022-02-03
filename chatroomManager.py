@@ -16,12 +16,58 @@ class Chatroom:
 
         self.run = True
         
-
+        self.active = None
 
         while self.run:
+            self.clock.tick(60)
+            keys = pygame.key.get_pressed()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.run = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mousex,mousey = pygame.mouse.get_pos()
+                    for button in self.chatroomclickables:
+                        
+                        if button.command == "input_field":
+                                button.deactivate()
+                                button.active = False
+                                button.color = (17,17,17)
+                                if button.click(mousex,mousey):
+                                    button.activate()
+                                    self.active = button
+                                    button.active = True
+                                    button.color = (35,35,35)
+                if self.active != None:
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_BACKSPACE:
+                            self.active.delChar()
+                        elif event.key == pygame.K_LEFT:
+                            self.active.moveCursorLeft()
+                        elif event.unicode in self.validChars:
+                            self.active.addChar(event.unicode)
+                    if event.type == pygame.KEYUP:
+                        if event.key == pygame.K_BACKSPACE:
+                            self.active.backspacevelocity = 1
+                            self.active.backspacecounter = 0
+                        elif event.key == pygame.K_RIGHT:
+                            self.active.rightarrowcount = 0
+                            self.active.rightarrowvecolicty = 1
+                        elif event.key == pygame.K_LEFT:
+                            self.active.leftarrowcount = 0
+                            self.active.leftarrowvelocity = 1
+                        elif event.unicode in self.validChars:
+                            self.active.lettercounter[event.unicode] = 0
+                            self.active.lettervelocity[event.unicode] = 1
+            if self.active != None:
+                if keys[pygame.K_BACKSPACE]:
+                    self.active.backspace()
+                if keys[pygame.K_LEFT]:
+                    self.active.left()
+                if keys[pygame.K_RIGHT]:
+                    self.active.right()
+                for i in self.validChars:
+                    if keys[ord(i)]:
+                        self.active.letter(i)
             self.draw()
     
     def draw(self):
@@ -35,9 +81,9 @@ class Chatroom:
         self.chatroomdrawables.append(Rectangle(400,100,5,980,(2,217,198),self.window,self.pixelratio))
         self.chatroomdrawables.append(Text("Orbitron",(193,146,252),"USERS",self.window,200,175,self.pixelratio,75))
         self.chatroomdrawables.append(Rectangle(75,200,250,10,(193,146,252),self.window,self.pixelratio))
-        self.createInputField(450,800,1000,200,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter Text Here...",(193,146,252),self.validChars)
+        self.createInputField(450,1000,1000,30,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,30)
 
-    def createInputField(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars):
-        tempInputField = InputField(x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars)
+    def createInputField(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size):
+        tempInputField = InputField(x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size)
         self.chatroomdrawables.append(tempInputField)
         self.chatroomclickables.append(tempInputField)
