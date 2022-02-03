@@ -31,7 +31,7 @@ class Button:
         return False
 
 class InputField:
-    def __init__(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor):
+    def __init__(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars):
         self.x=x/pixelratio
         self.y=y/pixelratio
         self.width=width/pixelratio
@@ -48,6 +48,10 @@ class InputField:
         self.mode = mode
         self.currentIndex = 0
         self.maxCurrentIndex = len(self.textMessage)
+        self.lettercounter = {char:0 for char in validChars}
+        self.lettervelocity = {char:1 for char in validChars}
+        self.backspacecounter = 0
+        self.backspacevelocity = 1
         self.changeText()
     
     def draw(self):
@@ -139,6 +143,20 @@ class InputField:
                     self.currentIndex=0
                     break
         self.changeText()
+    
+    def backspace(self):
+        self.backspacecounter += 0.1*self.backspacevelocity
+        if self.backspacecounter > 1:
+            self.backspacecounter = 0
+            self.backspacevelocity += 0.5
+            self.delChar()
+    
+    def letter(self,char):
+        self.lettercounter[char] += 0.05*self.lettervelocity[char]
+        if self.lettercounter[char] > 1:
+            self.lettercounter[char] = 0
+            self.lettervelocity[char] += 0.5
+            self.addChar(char)
 
 class Image:
     def __init__(self,filepath,x,y,width,height,window,pixelratio):

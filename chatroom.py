@@ -12,5 +12,5 @@ class Chatroom:
                     self.run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     self.run = False
-            window.fill((255,128,0))
+            window.fill((0,255,255))
             pygame.display.update()
