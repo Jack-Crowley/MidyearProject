@@ -1,10 +1,10 @@
 import socket
 
 HEADER = 64
-PORT = 5050
+PORT = 9000
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
-SERVER = "192.168.1.26"
+SERVER = "ec2-3-94-90-43.compute-1.amazonaws.com"
 ADDR = (SERVER, PORT)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -2,8 +2,8 @@ import socket
 import errno
 
 HEADER = 16
-PORT = 8080
-IP = '172.31.86.81'
+PORT = 9000
+IP = 'ec2-3-94-90-43.compute-1.amazonaws.com'
 ADDR = (IP, PORT)
 FORMAT = 'utf-8'
 
