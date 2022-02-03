@@ -2,7 +2,7 @@ import pygame
 from shapes import *
 
 class Login:
-    def __init__(self,window,clock):
+    def __init__(self,window,clock,pixelratio):
         
 
         self.window = window
@@ -11,8 +11,7 @@ class Login:
         self.username = None
         self.password = None
 
-        self.MWIDTH, self.MHEIGHT = self.window.get_size()
-        self.pixelratio = 1920/self.MWIDTH
+        self.pixelratio = pixelratio
 
         self.validChars = "`123f4567890-=~!@#$% ^&*v()_+qwertyuiop[]\\asdghjxkl'zcbn,./ZXCVBNM<>?ASDFGHJKL:;\"QWERTYUIOP{}|m"
 
