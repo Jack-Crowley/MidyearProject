@@ -28,6 +28,7 @@ def handle_client(conn, addr):
     
     clients[conn] = user
     sockets_list.append(conn)
+    ignoreDisconnected = []
 
     connected = True
     while connected:
@@ -43,7 +44,10 @@ def handle_client(conn, addr):
                         client_socket.send(user['header'] + user['data'] + f'{msg_len:<{HEADER}}'.encode(FORMAT) + msg.encode(FORMAT))
                         print(msg)
                     except:
-                        del clients[client_socket]
+                        ignoreDisconnected.append(client_socket)
+            for discon in ignoreDisconnected:
+                del clients[discon]
+            ignoreDisconnected = []
         else:
             connected = False
     
