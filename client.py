@@ -4,7 +4,7 @@ import errno
 
 HEADER = 16
 PORT = 9000
-IP = socket.gethostbyname(socket.gethostname())
+IP = 'ec2-3-82-107-221.compute-1.amazonaws.com'
 ADDR = (IP, PORT)
 FORMAT = 'utf-8'
 
