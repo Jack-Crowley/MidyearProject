@@ -1,25 +1,23 @@
 import pygame
 from shapes import *
-
-class Login:
-    def __init__(self,window,clock,pixelratio,validChars):
-        
-
+class Chatroom:
+    def __init__(self, window, clock, pixelratio,validChars):
         self.window = window
+
         self.clock = clock
-
-        self.username = None
-        self.password = None
-
         self.pixelratio = pixelratio
 
         self.validChars = validChars
 
-        self.drawables=[]
-        self.clickables = []
+        self.chatroomclickables = []
+        self.chatroomdrawables = []
+
         self.loadDrawables()
-        self.active = None
+
         self.run = True
+        
+        self.active = None
+
         while self.run:
             self.clock.tick(60)
             keys = pygame.key.get_pressed()
@@ -28,7 +26,8 @@ class Login:
                     self.run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousex,mousey = pygame.mouse.get_pos()
-                    for button in self.clickables:
+                    for button in self.chatroomclickables:
+                        
                         if button.command == "input_field":
                                 button.deactivate()
                                 button.active = False
@@ -38,11 +37,6 @@ class Login:
                                     self.active = button
                                     button.active = True
                                     button.color = (35,35,35)
-                        elif button.command == "new_screen":
-                            if button.click(mousex,mousey):
-                                    print(self.username.textMessage)
-                                    print(self.password.textMessage)
-                                    self.run = False
                 if self.active != None:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_BACKSPACE:
@@ -74,42 +68,22 @@ class Login:
                 for i in self.validChars:
                     if keys[ord(i)]:
                         self.active.letter(i)
-                    
-            
             self.draw()
-        
+    
+    def draw(self):
+        self.window.fill((27,27,27))
+        for i in self.chatroomdrawables:
+            i.draw()
+        pygame.display.update()
+    
     def loadDrawables(self):
-        self.drawables.append(Rectangle(0,0,1920,192,(17,17,17),self.window,self.pixelratio))
-        self.drawables.append(Rectangle(576,300,768,700,(17,17,17),self.window,self.pixelratio))
-        self.drawables.append(Text("Orbitron",(193,146,252),"PERMEABILITY",self.window,1067,96,self.pixelratio,192))
-        self.drawables.append(Text("Orbitron",(2,217,198),"LOG IN TO CONTINUE",self.window,960,350,self.pixelratio,75))
-        self.drawables.append(Rectangle(726,550,468,15,(2,217,198),self.window,self.pixelratio))
-        self.drawables.append(Image("Images\purple_log_header.png",390,10,150,150,self.window,self.pixelratio))
-        self.createInputField(726,475,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter Username...",(193,146,252),self.validChars,75)
-
-        self.createInputField(726,600,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"password","Enter Password...",(193,146,252),self.validChars,75)
-        self.drawables.append(Rectangle(726,675,468,15,(2,217,198),self.window,self.pixelratio))
-
-        self.createButton(726,825,468,75,(193,146,252),self.window,self.pixelratio,command="new_screen")
-        self.drawables.append(Text("Orbitron",(255,255,255), "LOGIN",self.window,960,862,self.pixelratio,75))
-
-    def createButton(self,x,y,width,height,color,window,pixelratio,command):
-        tempButton = Button(x,y,width,height,color,window,pixelratio,command)
-        self.drawables.append(tempButton)
-        self.clickables.append(tempButton)
+        self.chatroomdrawables.append(Rectangle(0,100,1920,5,(2,217,198),self.window,self.pixelratio))
+        self.chatroomdrawables.append(Rectangle(400,100,5,980,(2,217,198),self.window,self.pixelratio))
+        self.chatroomdrawables.append(Text("Orbitron",(193,146,252),"USERS",self.window,200,175,self.pixelratio,75))
+        self.chatroomdrawables.append(Rectangle(75,200,250,10,(193,146,252),self.window,self.pixelratio))
+        self.createInputField(450,1000,1000,30,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,30)
 
     def createInputField(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size):
         tempInputField = InputField(x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size)
-        self.drawables.append(tempInputField)
-        self.clickables.append(tempInputField)
-        if y == 600:
-            self.password = tempInputField
-        else:
-            self.username = tempInputField
-
-
-    def draw(self):
-        self.window.fill((27,27,27))
-        for i in self.drawables:
-            i.draw()
-        pygame.display.update()
+        self.chatroomdrawables.append(tempInputField)
+        self.chatroomclickables.append(tempInputField)
