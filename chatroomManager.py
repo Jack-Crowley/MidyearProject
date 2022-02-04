@@ -11,6 +11,7 @@ class Chatroom:
 
         self.chatroomclickables = []
         self.chatroomdrawables = []
+        self.chatroommessages = []
 
         self.loadDrawables()
 
@@ -27,7 +28,6 @@ class Chatroom:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousex,mousey = pygame.mouse.get_pos()
                     for button in self.chatroomclickables:
-                        
                         if button.command == "input_field":
                                 button.deactivate()
                                 button.active = False
@@ -43,6 +43,8 @@ class Chatroom:
                             self.active.delChar()
                         elif event.key == pygame.K_LEFT:
                             self.active.moveCursorLeft()
+                        elif event.key == pygame.K_RETURN:
+                            self.newMessage()
                         elif event.unicode in self.validChars:
                             self.active.addChar(event.unicode)
                     if event.type == pygame.KEYUP:
@@ -72,8 +74,8 @@ class Chatroom:
     
     def draw(self):
         self.window.fill((27,27,27))
-        for i in self.chatroomdrawables:
-            i.draw()
+        for i in self.chatroomdrawables: i.draw()
+        for i in self.chatroommessages: i.draw()
         pygame.display.update()
     
     def loadDrawables(self):
@@ -87,3 +89,16 @@ class Chatroom:
         tempInputField = InputField(x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size)
         self.chatroomdrawables.append(tempInputField)
         self.chatroomclickables.append(tempInputField)
+
+    def newMessage(self):
+        newtext = self.active.getStr()
+        y = 1000/self.pixelratio
+        a = messageObject(450,y,1000,(255,255,255),self.window,self.pixelratio,"test",newtext,30)
+        for i in self.chatroommessages:
+            i.y -= a.height/self.pixelratio-(len(a.messages)*a.size)/4
+        self.active.fullMSG = ""
+        self.chatroommessages.append(a)
+        self.active.textMessage = ""
+        self.active.textList = []
+        self.active.linecount=0
+        self.active.y = 1000/self.pixelratio
