@@ -76,8 +76,11 @@ class Login:
         self.createInputField(726,600,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"password","Enter Password...",(193,146,252),self.validChars)
         self.drawables.append(Rectangle(726,675,468,15,(2,217,198),self.window,self.pixelratio))
 
-        self.createButton(726,825,468,75,(193,146,252),self.window,self.pixelratio,command="new_screen")
-        self.drawables.append(Text("Orbitron",(255,255,255), "LOGIN",self.window,960,862,self.pixelratio,75))
+        self.createButton(726,740,468,75,(193,146,252),self.window,self.pixelratio,command="new_screen")
+        self.drawables.append(Text("Orbitron",(255,255,255), "LOGIN",self.window,960,777,self.pixelratio,75))
+
+        self.createButton(726,845,468,75,(193,146,252),self.window,self.pixelratio,command="")
+        self.drawables.append(Text("Orbitron",(255,255,255), "REGISTER",self.window,960,882,self.pixelratio,75))
 
     def createButton(self,x,y,width,height,color,window,pixelratio,command):
         tempButton = Button(x,y,width,height,color,window,pixelratio,command)
