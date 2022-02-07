@@ -1,11 +1,13 @@
 import pygame
 from shapes import *
 class Chatroom:
-    def __init__(self, window, clock, pixelratio,validChars):
+    def __init__(self, window, clock, pixelratio,validChars, client):
         self.window = window
 
         self.clock = clock
         self.pixelratio = pixelratio
+
+        self.client = client
 
         self.validChars = validChars
 
@@ -47,6 +49,7 @@ class Chatroom:
                         elif event.key == pygame.K_LEFT:
                             self.active.moveCursorLeft()
                         elif event.key == pygame.K_RETURN:
+                            self.send()
                             self.newMessage()
                         elif event.unicode in self.validChars:
                             self.active.addChar(event.unicode)
@@ -107,3 +110,7 @@ class Chatroom:
         self.active.textList = []
         self.active.linecount=0
         self.active.y = 1000/self.pixelratio
+
+    def send(self):
+        newtext = self.active.getStr()
+        self.client.send(newtext)
