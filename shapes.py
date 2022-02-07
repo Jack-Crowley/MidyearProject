@@ -1,3 +1,4 @@
+from pyexpat.errors import messages
 import pygame
 
 class Rectangle:
@@ -58,6 +59,7 @@ class InputField:
         self.rightarrowcount = 0
         self.rightarrowvecolicty = 1
         self.linecount=0
+        self.fullMSG = ""
         self.textList = []
         self.text = pygame.font.SysFont("Orbitron", int(self.size))
         self.changeText()
@@ -99,6 +101,7 @@ class InputField:
             self.textObject = self.text.render(self.textMessage, False, self.textcolor)
             if self.textObject.get_width() > self.width - 5:
                 self.textList.append(self.textObject)
+                self.fullMSG += self.textMessage
                 self.textMessage = ""
                 self.linecount += 1
                 self.y-=self.height
@@ -195,6 +198,10 @@ class InputField:
             
             self.addChar("")
 
+    def getStr(self):
+        print()
+        return self.textMessage+self.fullMSG
+
 
 class Image:
     def __init__(self,filepath,x,y,width,height,window,pixelratio):
@@ -231,3 +238,39 @@ class Text:
         self.newText = pygame.font.SysFont(self.font, int(self.size))
         self.textObject = self.newText.render(newMessage, False, self.color)
         self.message = newMessage
+    
+class messageObject:
+    def __init__(self,x,y,width,color,window,pixelratio,username,text,size):
+        self.x=x/pixelratio
+        self.width=width/pixelratio
+        self.color=color
+        self.window=window
+        self.indepenty=size*2
+        self.username=username
+        self.text=text
+        self.size = size/pixelratio
+        self.font = pygame.font.SysFont("Orbitron", int(self.size))
+        self.messages = [self.font.render(self.username, False, (2,217,168))]
+        self.load_message()
+        self.height = 64/pixelratio+(35/pixelratio*(len(self.messages)-2))
+
+        self.y=y/pixelratio
+        print(self.y,self.height,len(self.messages))
+    
+    def draw(self):
+        pygame.draw.rect(self.window,(0,255,255),(self.x,self.y-self.indepenty,self.width,self.height),1,1)
+        for i in range(len(self.messages)):
+            self.window.blit(self.messages[i],(self.x,self.y+(i*self.size)-self.indepenty))
+
+    def load_message(self):
+        tempMessage = ""
+        for i in range(len(self.text)):
+            tempMessage += self.text[i]
+            self.textObject = self.font.render(tempMessage, False, (255,255,255))
+            if self.textObject.get_width() > self.width:
+                self.messages.append(self.textObject)
+                tempMessage = ""
+        self.messages.append(self.font.render(tempMessage, False, (255,255,255)))
+
+
+

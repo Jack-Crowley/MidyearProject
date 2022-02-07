@@ -13,6 +13,10 @@ pixelratio = 1920/MWIDTH
 
 pygame.font.init()
 
-Login(window,clock,pixelratio,validChars)
+login = Login(window,clock,pixelratio,validChars)
+username = login.username.textMessage
+password = login.password.textMessage
+
+
 Chatroom(window,clock,pixelratio,validChars)
 pygame.display.quit()
