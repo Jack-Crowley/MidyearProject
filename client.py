@@ -3,35 +3,35 @@ import threading
 import errno
 
 class Client():
-    def __init__(self) -> None:
+    def __init__(self, username, password):
         self.HEADER = 16
         self.PORT = 9000
         self.IP = "ec2-3-82-107-221.compute-1.amazonaws.com"
         self.ADDR = (self.IP, self.PORT)
         self.FORMAT = 'utf-8'
 
-        self.my_username = input("Username: ")
+        self.my_username = username
 
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(self.ADDR)
         self.client_socket.setblocking(False)
 
         self.username = self.my_username.encode(self.FORMAT)
-        username_header = f"{len(self.username):<{self.HEADER}}".encode(self.FORMAT)
-        self.client_socket.send(username_header)
-        self.client_socket.send(self.username)
+        self.username_header = f"{len(self.username):<{self.HEADER}}".encode(self.FORMAT)
 
         send_thread = threading.Thread(target = self.send)
         recieve_thread = threading.Thread(target = self.recieve)
         send_thread.start()
         recieve_thread.start()
 
-    def send(self):
+    def send(self, message):
         while True:
-            message = input().encode(self.FORMAT)
+            message = message.encode(self.FORMAT)
             msg_length = len(message)
             send_length = str(msg_length).encode(self.FORMAT)
             send_length += b' ' * (self.HEADER - len(send_length))
+            self.client_socket.send(self.username_header)
+            self.client_socket.send(self.username)
             self.client_socket.send(send_length)
             self.client_socket.send(message)
 
