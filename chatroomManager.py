@@ -113,4 +113,5 @@ class Chatroom:
 
     def send(self):
         newtext = self.active.getStr()
+        print(newtext)
         self.client.send(newtext)
