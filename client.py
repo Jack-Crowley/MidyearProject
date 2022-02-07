@@ -6,7 +6,7 @@ class Client():
     def __init__(self, username, password):
         self.HEADER = 16
         self.PORT = 9000
-        self.IP = "ec2-3-82-107-221.compute-1.amazonaws.com"
+        self.IP = socket.gethostbyname(socket.gethostname())
         self.ADDR = (self.IP, self.PORT)
         self.FORMAT = 'utf-8'
 
