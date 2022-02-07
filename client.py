@@ -2,87 +2,84 @@ import socket
 import threading
 import errno
 
-HEADER = 16
-PORT = 9000
-IP = "ec2-3-82-107-221.compute-1.amazonaws.com"
-ADDR = (IP, PORT)
-FORMAT = 'utf-8'
+class Client():
+    def __init__(self) -> None:
+        self.HEADER = 16
+        self.PORT = 9000
+        self.IP = "ec2-3-82-107-221.compute-1.amazonaws.com"
+        self.ADDR = (self.IP, self.PORT)
+        self.FORMAT = 'utf-8'
 
-my_username = input("Username: ")
+        self.my_username = input("Username: ")
 
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(ADDR)
-client_socket.setblocking(False)
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socket.connect(self.ADDR)
+        self.client_socket.setblocking(False)
 
-username = my_username.encode(FORMAT)
-username_header = f"{len(username):<{HEADER}}".encode(FORMAT)
-client_socket.send(username_header)
-client_socket.send(username)
+        self.username = self.my_username.encode(self.FORMAT)
+        username_header = f"{len(self.username):<{self.HEADER}}".encode(self.FORMAT)
+        self.client_socket.send(username_header)
+        self.client_socket.send(self.username)
 
-def send():
-    while True:
-        message = input().encode(FORMAT)
-        msg_length = len(message)
-        send_length = str(msg_length).encode(FORMAT)
-        send_length += b' ' * (HEADER - len(send_length))
-        client_socket.send(send_length)
-        client_socket.send(message)
+        send_thread = threading.Thread(target = self.send)
+        recieve_thread = threading.Thread(target = self.recieve)
+        send_thread.start()
+        recieve_thread.start()
 
-# while True:
-#     message = input(f'{my_username} > ')
-#     send(message)
+    def send(self):
+        while True:
+            message = input().encode(self.FORMAT)
+            msg_length = len(message)
+            send_length = str(msg_length).encode(self.FORMAT)
+            send_length += b' ' * (self.HEADER - len(send_length))
+            self.client_socket.send(send_length)
+            self.client_socket.send(message)
 
-#     try:
-#         while True:
-#             username_header = client_socket.recv(HEADER)
-#             if not len(username_header):
-#                 print('Connection closed by the server')
-#                 exit()
-#             username_length = int(username_header.decode(FORMAT).strip())
-#             username = client_socket.recv(username_length).decode(FORMAT)
-#             message_header = client_socket.recv(HEADER)
-#             message_length = int(message_header.decode(FORMAT).strip())
-#             message = client_socket.recv(message_length).decode(FORMAT)
+    # while True:
+    #     message = input(f'{my_username} > ')
+    #     send(message)
 
-#             print(f'{username} > {message}')
-#     except IOError as e:
-#         if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
-#             print('Reading error: {}'.format(str(e)))
-#             exit()
-#     except Exception as e:
-#         # Any other exception - something happened, exit
-#         print('Reading error: '.format(str(e)))
-#         exit()
+    #     try:
+    #         while True:
+    #             username_header = client_socket.recv(HEADER)
+    #             if not len(username_header):
+    #                 print('Connection closed by the server')
+    #                 exit()
+    #             username_length = int(username_header.decode(FORMAT).strip())
+    #             username = client_socket.recv(username_length).decode(FORMAT)
+    #             message_header = client_socket.recv(HEADER)
+    #             message_length = int(message_header.decode(FORMAT).strip())
+    #             message = client_socket.recv(message_length).decode(FORMAT)
 
-def recieve():
-    while True:
-        try:
-            while True:
-                username_header = client_socket.recv(HEADER)
-                if not len(username_header):
-                    print('Connection closed by the server')
+    #             print(f'{username} > {message}')
+    #     except IOError as e:
+    #         if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
+    #             print('Reading error: {}'.format(str(e)))
+    #             exit()
+    #     except Exception as e:
+    #         # Any other exception - something happened, exit
+    #         print('Reading error: '.format(str(e)))
+    #         exit()
+
+    def recieve(self):
+        while True:
+            try:
+                while True:
+                    username_header = self.client_socket.recv(self.HEADER)
+                    if not len(username_header):
+                        print('Connection closed by the server')
+                        exit()
+                    username_length = int(username_header.decode(self.FORMAT).strip())
+                    username = self.client_socket.recv(username_length).decode(self.FORMAT)
+                    message_header = self.client_socket.recv(self.HEADER)
+                    message_length = int(message_header.decode(self.FORMAT).strip())
+                    message = self.client_socket.recv(message_length).decode(self.FORMAT)
+                    print(f'{username} > {message}')
+            except IOError as e:
+                if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
+                    print('Reading error: {}'.format(str(e)))
                     exit()
-                username_length = int(username_header.decode(FORMAT).strip())
-                username = client_socket.recv(username_length).decode(FORMAT)
-                message_header = client_socket.recv(HEADER)
-                message_length = int(message_header.decode(FORMAT).strip())
-                message = client_socket.recv(message_length).decode(FORMAT)
-                print(f'{username} > {message}')
-        except IOError as e:
-            if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
-                print('Reading error: {}'.format(str(e)))
+            except Exception as e:
+                # Any other exception - something happened, exit
+                print('Reading error: '.format(str(e)))
                 exit()
-        except Exception as e:
-            # Any other exception - something happened, exit
-            print('Reading error: '.format(str(e)))
-            exit()
-
-def main():
-    send_thread = threading.Thread(target = send)
-    recieve_thread = threading.Thread(target = recieve)
-    send_thread.start()
-    print('started the sending thread')
-    recieve_thread.start()
-    print('started the recieving thread')
-
-main()
