@@ -1,6 +1,7 @@
 import pygame
 from chatroomManager import Chatroom
 from loginscreen import Login
+from client import Client
 
 window = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
@@ -17,6 +18,7 @@ login = Login(window,clock,pixelratio,validChars)
 username = login.username.textMessage
 password = login.password.textMessage
 
+client = Client(username,password)
 
-Chatroom(window,clock,pixelratio,validChars)
+Chatroom(window,clock,pixelratio,validChars, client)
 pygame.display.quit()
