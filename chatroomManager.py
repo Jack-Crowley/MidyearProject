@@ -19,6 +19,9 @@ class Chatroom:
         
         self.active = None
 
+        self.textboxy = 1000
+        self.textboxlinecount = 0
+
         while self.run:
             self.clock.tick(60)
             keys = pygame.key.get_pressed()
@@ -61,6 +64,9 @@ class Chatroom:
                             self.active.lettercounter[event.unicode] = 0
                             self.active.lettervelocity[event.unicode] = 1
             if self.active != None:
+                self.textboxy = self.active.y
+                for i in self.chatroommessages:
+                    i.y = self.textboxy-(35/pixelratio*(len(i.messages)-2))
                 if keys[pygame.K_BACKSPACE]:
                     self.active.backspace()
                 if keys[pygame.K_LEFT]:
@@ -92,10 +98,9 @@ class Chatroom:
 
     def newMessage(self):
         newtext = self.active.getStr()
-        y = 1000/self.pixelratio
-        a = messageObject(450,y,1000,(255,255,255),self.window,self.pixelratio,"test",newtext,30)
+        a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,"test",newtext,30)
         for i in self.chatroommessages:
-            i.y -= a.height/self.pixelratio-(len(a.messages)*a.size)/4
+            i.indepenty += a.height/self.pixelratio
         self.active.fullMSG = ""
         self.chatroommessages.append(a)
         self.active.textMessage = ""

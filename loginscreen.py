@@ -40,8 +40,6 @@ class Login:
                                     button.color = (35,35,35)
                         elif button.command == "new_screen":
                             if button.click(mousex,mousey):
-                                    print(self.username.textMessage)
-                                    print(self.password.textMessage)
                                     self.run = False
                 if self.active != None:
                     if event.type == pygame.KEYDOWN:

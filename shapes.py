@@ -245,20 +245,22 @@ class messageObject:
         self.width=width/pixelratio
         self.color=color
         self.window=window
+        self.indepenty=size*2
         self.username=username
         self.text=text
-        self.size = size
+        self.size = size/pixelratio
         self.font = pygame.font.SysFont("Orbitron", int(self.size))
         self.messages = [self.font.render(self.username, False, (2,217,168))]
         self.load_message()
-        self.height = self.size*len(self.messages)+len(self.messages)**2/pixelratio
-        self.y=y/pixelratio-self.height
+        self.height = 64/pixelratio+(35/pixelratio*(len(self.messages)-2))
+
+        self.y=y/pixelratio
         print(self.y,self.height,len(self.messages))
     
     def draw(self):
-        pygame.draw.rect(self.window,(0,255,255),(self.x,self.y,self.width,self.size*len(self.messages)),1,1)
+        pygame.draw.rect(self.window,(0,255,255),(self.x,self.y-self.indepenty,self.width,self.height),1,1)
         for i in range(len(self.messages)):
-            self.window.blit(self.messages[i],(self.x,self.y+(i*self.size)))
+            self.window.blit(self.messages[i],(self.x,self.y+(i*self.size)-self.indepenty))
 
     def load_message(self):
         tempMessage = ""
