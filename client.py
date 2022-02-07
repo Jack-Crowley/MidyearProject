@@ -24,9 +24,9 @@ class Client():
         send_thread.start()
         recieve_thread.start()
 
-    def send(self, message):
+    def send(self, msg):
         while True:
-            message = message.encode(self.FORMAT)
+            message = msg.encode(self.FORMAT)
             msg_length = len(message)
             send_length = str(msg_length).encode(self.FORMAT)
             send_length += b' ' * (self.HEADER - len(send_length))
