@@ -9,7 +9,7 @@ class Client():
         self.IP = socket.gethostbyname(socket.gethostname())
         self.ADDR = (self.IP, self.PORT)
         self.FORMAT = 'utf-8'
-        self.msg = "h"
+        self.msg = ""
 
         self.my_username = username
 
@@ -20,17 +20,16 @@ class Client():
         self.username = self.my_username.encode(self.FORMAT)
         self.username_header = f"{len(self.username):<{self.HEADER}}".encode(self.FORMAT)
 
-
     def send_message(self, msg):
-        while True:
-            message = msg.encode(self.FORMAT)
-            msg_length = len(message)
-            send_length = str(msg_length).encode(self.FORMAT)
-            send_length += b' ' * (self.HEADER - len(send_length))
-            # self.client_socket.send(self.username_header)
-            # self.client_socket.send(self.username)
-            self.client_socket.send(send_length)
-            self.client_socket.send(message)
+        message = msg.encode(self.FORMAT)
+        msg_length = len(message)
+        send_length = str(msg_length).encode(self.FORMAT)
+        send_length += b' ' * (self.HEADER - len(send_length))
+        self.client_socket.send(self.username_header)
+        self.client_socket.send(self.username)
+        self.client_socket.send(send_length)
+        self.client_socket.send(message)
+        return f'Printed out {msg}'
 
     # while True:
     #     message = input(f'{my_username} > ')
@@ -81,12 +80,5 @@ class Client():
                 print('Reading error: '.format(str(e)))
                 exit()
 
-def main():
-    client = Client("Jack", "Bad")
-    send_thread = threading.Thread(target = client.send_message, args = client.msg)
-    recieve_thread = threading.Thread(target = client.recieve)
-    send_thread.start()
-    recieve_thread.start()
-    client.send_message("Jack is bad")
-
-main()
+jack = Client("Jack", "Bad")
+jack.send_message("Jack is bad")
