@@ -93,8 +93,8 @@ class Login:
         self.createButton(726,740,468,75,(193,146,252),self.window,self.pixelratio,command="new_screen")
         self.drawables.append(Text("Orbitron",(255,255,255), "LOGIN",self.window,960,777,self.pixelratio,75))
 
-        self.createButton(726,845,468,75,(193,146,252),self.window,self.pixelratio,command="")
-        self.drawables.append(Text("Orbitron",(255,255,255), "REGISTER",self.window,960,882,self.pixelratio,75))
+        self.createButton(726,855,468,75,(193,146,252),self.window,self.pixelratio,command="")
+        self.drawables.append(Text("Orbitron",(255,255,255), "REGISTER",self.window,960,892,self.pixelratio,75))
 
     def createButton(self,x,y,width,height,color,window,pixelratio,command):
         tempButton = Button(x,y,width,height,color,window,pixelratio,command)
