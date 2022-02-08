@@ -36,13 +36,12 @@ def handle_client(conn, addr):
         if msg_len: 
             msg_len = int(msg_len)
             msg = conn.recv(msg_len).decode(FORMAT)
-
+            print(msg)
             user = clients[conn]
             for client_socket in clients:
                 if client_socket != conn:
                     try:
                         client_socket.send(user['header'] + user['data'] + f'{msg_len:<{HEADER}}'.encode(FORMAT) + msg.encode(FORMAT))
-                        print(msg)
                     except:
                         ignoreDisconnected.append(client_socket)
             for discon in ignoreDisconnected:
