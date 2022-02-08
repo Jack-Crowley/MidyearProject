@@ -1,11 +1,13 @@
 import pygame
 from shapes import *
 class Chatroom:
-    def __init__(self, window, clock, pixelratio,validChars):
+    def __init__(self, window, clock, pixelratio,validChars, client):
         self.window = window
 
         self.clock = clock
         self.pixelratio = pixelratio
+
+        self.client = client
 
         self.validChars = validChars
 
@@ -18,6 +20,9 @@ class Chatroom:
         self.run = True
         
         self.active = None
+
+        self.textboxy = 1000
+        self.textboxlinecount = 0
 
         while self.run:
             self.clock.tick(60)
@@ -44,6 +49,7 @@ class Chatroom:
                         elif event.key == pygame.K_LEFT:
                             self.active.moveCursorLeft()
                         elif event.key == pygame.K_RETURN:
+                            self.send()
                             self.newMessage()
                         elif event.unicode in self.validChars:
                             self.active.addChar(event.unicode)
@@ -61,6 +67,9 @@ class Chatroom:
                             self.active.lettercounter[event.unicode] = 0
                             self.active.lettervelocity[event.unicode] = 1
             if self.active != None:
+                self.textboxy = self.active.y
+                for i in self.chatroommessages:
+                    i.y = self.textboxy-(35/pixelratio*(len(i.messages)-2))
                 if keys[pygame.K_BACKSPACE]:
                     self.active.backspace()
                 if keys[pygame.K_LEFT]:
@@ -92,13 +101,17 @@ class Chatroom:
 
     def newMessage(self):
         newtext = self.active.getStr()
-        y = 1000/self.pixelratio
-        a = messageObject(450,y,1000,(255,255,255),self.window,self.pixelratio,"test",newtext,30)
+        a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,"test",newtext,30)
         for i in self.chatroommessages:
-            i.y -= a.height/self.pixelratio-(len(a.messages)*a.size)/4
+            i.indepenty += a.height/self.pixelratio
         self.active.fullMSG = ""
         self.chatroommessages.append(a)
         self.active.textMessage = ""
         self.active.textList = []
         self.active.linecount=0
         self.active.y = 1000/self.pixelratio
+
+    def send(self):
+        newtext = self.active.getStr()
+        print(newtext)
+        self.client.send_message(newtext)
