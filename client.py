@@ -20,12 +20,6 @@ class Client():
         self.username = self.my_username.encode(self.FORMAT)
         self.username_header = f"{len(self.username):<{self.HEADER}}".encode(self.FORMAT)
 
-        self.send_thread = threading.Thread(target = self.send_message, args = self.msg)
-        self.recieve_thread = threading.Thread(target = self.recieve)
-        self.send_thread.start()
-        self.recieve_thread.start()
-
-
     def send_message(self, msg):
         message = msg.encode(self.FORMAT)
         msg_length = len(message)
