@@ -29,56 +29,12 @@ class Client():
         self.client_socket.send(self.username)
         self.client_socket.send(send_length)
         self.client_socket.send(message)
-        return f'Printed out {msg}'
-
-    # while True:
-    #     message = input(f'{my_username} > ')
-    #     send(message)
-
-    #     try:
-    #         while True:
-    #             username_header = client_socket.recv(HEADER)
-    #             if not len(username_header):
-    #                 print('Connection closed by the server')
-    #                 exit()
-    #             username_length = int(username_header.decode(FORMAT).strip())
-    #             username = client_socket.recv(username_length).decode(FORMAT)
-    #             message_header = client_socket.recv(HEADER)
-    #             message_length = int(message_header.decode(FORMAT).strip())
-    #             message = client_socket.recv(message_length).decode(FORMAT)
-
-    #             print(f'{username} > {message}')
-    #     except IOError as e:
-    #         if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
-    #             print('Reading error: {}'.format(str(e)))
-    #             exit()
-    #     except Exception as e:
-    #         # Any other exception - something happened, exit
-    #         print('Reading error: '.format(str(e)))
-    #         exit()
-
-    def recieve(self):
-        while True:
-            try:
-                while True:
-                    username_header = self.client_socket.recv(self.HEADER)
-                    if not len(username_header):
-                        print('Connection closed by the server')
-                        exit()
-                    username_length = int(username_header.decode(self.FORMAT).strip())
-                    username = self.client_socket.recv(username_length).decode(self.FORMAT)
-                    message_header = self.client_socket.recv(self.HEADER)
-                    message_length = int(message_header.decode(self.FORMAT).strip())
-                    message = self.client_socket.recv(message_length).decode(self.FORMAT)
-                    print(f'{username} > {message}')
-            except IOError as e:
-                if e.errno != errno.EAGAIN and e.errno != errno.EWOULDBLOCK:
-                    print('Reading error: {}'.format(str(e)))
-                    exit()
-            except Exception as e:
-                # Any other exception - something happened, exit
-                print('Reading error: '.format(str(e)))
-                exit()
-
-jack = Client("Jack", "Bad")
-jack.send_message("Jack is bad")
+        username_header = self.client_socket.recv(self.HEADER)
+        if not len(username_header):
+            return 0
+        username_length = int(username_header.decode(self.FORMAT).strip())
+        username = self.client_socket.recv(username_length).decode(self.FORMAT)
+        message_header = self.client_socket.recv(self.HEADER)
+        message_length = int(message_header.decode(self.FORMAT).strip())
+        message = self.client_socket.recv(message_length).decode(self.FORMAT)
+        return f'{username}:{message}'
