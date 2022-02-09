@@ -28,23 +28,30 @@ def handle_client(conn, addr):
     ignoreDisconnected = []
     connected = True
     while connected:
-        msg_len = conn.recv(HEADER).decode(FORMAT)
-        if msg_len: 
-            msg_len = int(msg_len)
-            msg = conn.recv(msg_len).decode(FORMAT)
-            print(msg)
-            for client_socket in clients:
-                if client_socket != conn:
-                    try:
-                        clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}")
-                        client_socket.send(clients[client_socket][0])
-                        del clients[client_socket][0]
-                    except:
-                        ignoreDisconnected.append(client_socket)
-            for discon in ignoreDisconnected:
-                del clients[discon]
-            ignoreDisconnected = []
-        else:
+        try:
+            msg_len = conn.recv(HEADER).decode(FORMAT)
+            if msg_len: 
+                msg_len = int(msg_len)
+                msg = conn.recv(msg_len).decode(FORMAT)
+                print(msg)
+                for client_socket in clients:
+                    if client_socket != conn:
+                        try:
+                            clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}".encode(FORMAT))
+                            client_socket.send(clients[client_socket][0])
+                            del clients[client_socket][0]
+                        except:
+                            ignoreDisconnected.append(client_socket)
+                for discon in ignoreDisconnected:
+                    del clients[discon]
+                ignoreDisconnected = []
+            else:
+                if clients[conn] != []:
+                    conn.send(clients[conn][0])
+                    del clients[conn][0]
+                else:
+                    conn.send("".encode(FORMAT))
+        except:
             connected = False
     
     conn.close()
