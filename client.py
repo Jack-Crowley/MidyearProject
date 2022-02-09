@@ -15,7 +15,6 @@ class Client():
 
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(self.ADDR)
-        self.client_socket.setblocking(False)
 
         self.username = self.my_username.encode(self.FORMAT)
         self.username_header = f"{len(self.username):<{self.HEADER}}".encode(self.FORMAT)
@@ -29,17 +28,17 @@ class Client():
         self.client_socket.send(self.username)
         self.client_socket.send(send_length)
         self.client_socket.send(message)
-        try:
-            username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-            print(username_header)
-            username_length = int(username_header.decode(self.FORMAT).strip())
-            username = self.client_socket.recv(username_length).decode(self.FORMAT)
-            print(username)
-            message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-            message_length = int(message_header.decode(self.FORMAT).strip())
-            message = self.client_socket.recv(message_length).decode(self.FORMAT)
-            print(message)
-        except:
-            print("NO MSG")
-            return 0
+        # try:
+        username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
+        print(username_header)
+        username_length = int(username_header.decode(self.FORMAT).strip())
+        username = self.client_socket.recv(username_length).decode(self.FORMAT)
+        print(username)
+        message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
+        message_length = int(message_header.decode(self.FORMAT).strip())
+        message = self.client_socket.recv(message_length).decode(self.FORMAT)
+        print(message)
+        # except:
+        #     print("NO MSG")
+        #     return 0
         return f'{username}:{message}'

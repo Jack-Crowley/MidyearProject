@@ -36,22 +36,25 @@ def handle_client(conn, addr):
                 if msg: 
                     print(msg)
                 for client_socket in clients:
-                    if client_socket != conn:
-                        try:
-                            clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}".encode(FORMAT))
-                            client_socket.send(clients[client_socket][0])
-                            del clients[client_socket][0]
-                        except:
-                            ignoreDisconnected.append(client_socket)
-                for discon in ignoreDisconnected:
-                    del clients[discon]
-                ignoreDisconnected = []
-            else:
-                if clients[conn] != []:
-                    conn.send(clients[conn][0])
-                    del clients[conn][0]
+                    if threading.active_count != 2:
+                        if client_socket != conn:
+                            try:
+                                clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}".encode(FORMAT))
+                                client_socket.send(clients[client_socket][0])
+                                del clients[client_socket][0]
+                            except:
+                                ignoreDisconnected.append(client_socket)
+                    else:
+                        conn.send("").encode(FORMAT)
+                    for discon in ignoreDisconnected:
+                        del clients[discon]
+                    ignoreDisconnected = []
                 else:
-                    conn.send("".encode(FORMAT))
+                    if clients[conn] != []:
+                        conn.send(clients[conn][0])
+                        del clients[conn][0]
+                    else:
+                        conn.send("".encode(FORMAT))
         except:
             connected = False
     
