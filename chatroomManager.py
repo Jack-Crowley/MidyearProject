@@ -32,7 +32,7 @@ class Chatroom:
                 del(self.messageQueue[0])
             else:
                 msg = client.send_message("hi")
-            if msg != "":
+            if msg != 0:
                 self.createNewMessage(msg)
             self.clock.tick(60)
             keys = pygame.key.get_pressed()
@@ -121,7 +121,7 @@ class Chatroom:
         self.active.y = 1000/self.pixelratio
 
     def createNewMessage(self,msg):
-        a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,msg,30)
+        a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,"username",msg,30)
         for i in self.chatroommessages:
             i.indepenty += a.height/self.pixelratio
         self.chatroommessages.append(a)
