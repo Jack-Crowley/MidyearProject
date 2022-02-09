@@ -31,7 +31,7 @@ class Chatroom:
                 msg = client.send_message(self.messageQueue[0])
                 del(self.messageQueue[0])
             else:
-                msg = client.send_message("hi")
+                msg = client.send_message("")
             if msg != 0:
                 self.createNewMessage(msg)
             self.clock.tick(60)
