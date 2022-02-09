@@ -29,7 +29,7 @@ def handle_client(conn, addr):
     clients[conn] = user
     sockets_list.append(conn)
     ignoreDisconnected = []
-
+    message_queue = []
     connected = True
     while connected:
         msg_len = conn.recv(HEADER).decode(FORMAT)
@@ -41,8 +41,10 @@ def handle_client(conn, addr):
             for client_socket in clients:
                 if client_socket != conn:
                     try:
-                        client_socket.send(user['header'] + user['data'] + f'{msg_len:<{HEADER}}'.encode(FORMAT) + msg.encode(FORMAT))
+                        message_queue.append(f"{user['header']}{user['data']}{msg_len}{msg}")
+                        client_socket.send(message_queue[0])
                         print(msg)
+                        del message_queue[0]
                     except:
                         ignoreDisconnected.append(client_socket)
             for discon in ignoreDisconnected:
