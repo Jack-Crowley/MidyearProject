@@ -26,7 +26,6 @@ def handle_client(conn, addr):
     
     sockets_list.append(conn)
     ignoreDisconnected = []
-    message_queue = []
     connected = True
     while connected:
         msg_len = conn.recv(HEADER).decode(FORMAT)
@@ -37,9 +36,9 @@ def handle_client(conn, addr):
             for client_socket in clients:
                 if client_socket != conn:
                     try:
-                        message_queue.append(f"{user['header']}{user['data']}{msg_len}{msg}")
-                        client_socket.send(message_queue[0])
-                        del message_queue[0]
+                        clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}")
+                        client_socket.send(clients[client_socket][0])
+                        del clients[client_socket][0]
                     except:
                         ignoreDisconnected.append(client_socket)
             for discon in ignoreDisconnected:
@@ -55,6 +54,7 @@ def start():
     print(f"[LISTENING] Server is listening on {IP}")
     while True:
         conn, addr = server_socket.accept()
+        clients[conn] = []
         print('Accepted new connection from {}:{}'.format(*addr))
         thread = threading.Thread(target = handle_client, args = (conn, addr))
         thread.start()
