@@ -36,7 +36,7 @@ def handle_client(conn, addr):
                 if msg: 
                     print(msg)
                 for client_socket in clients:
-                    if threading.active_count != 2:
+                    if threading.active_count() != 2:
                         if client_socket != conn:
                             try:
                                 clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}".encode(FORMAT))
