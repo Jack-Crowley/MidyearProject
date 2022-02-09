@@ -39,7 +39,6 @@ def handle_client(conn, addr):
                     try:
                         message_queue.append(f"{user['header']}{user['data']}{msg_len}{msg}")
                         client_socket.send(message_queue[0])
-                        print(msg)
                         del message_queue[0]
                     except:
                         ignoreDisconnected.append(client_socket)
