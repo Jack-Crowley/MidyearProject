@@ -19,12 +19,10 @@ def handle_client(conn, addr):
     try:
         msg_len = conn.recv(HEADER)
         message_length = msg_len.decode(FORMAT)
-        if not len(msg_len):
-            return False
         message_length = int(message_length)
         user = {'header': msg_len, 'data': conn.recv(message_length)}
     except:
-        pass
+        print('unable to get username')
     
     sockets_list.append(conn)
     ignoreDisconnected = []
