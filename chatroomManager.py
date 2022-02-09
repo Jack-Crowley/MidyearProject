@@ -121,7 +121,7 @@ class Chatroom:
         self.active.y = 1000/self.pixelratio
 
     def createNewMessage(self,msg):
-        a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,"test",msg,30)
+        a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,msg,30)
         for i in self.chatroommessages:
             i.indepenty += a.height/self.pixelratio
         self.chatroommessages.append(a)
