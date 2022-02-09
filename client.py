@@ -33,9 +33,12 @@ class Client():
             username_header = self.client_socket.recv(self.HEADER)
             username_length = int(username_header.decode(self.FORMAT).strip())
             username = self.client_socket.recv(username_length).decode(self.FORMAT)
+            print(username)
             message_header = self.client_socket.recv(self.HEADER)
             message_length = int(message_header.decode(self.FORMAT).strip())
             message = self.client_socket.recv(message_length).decode(self.FORMAT)
+            print(message)
         except:
+            print("NO MSG")
             return 0
         return f'{username}:{message}'
