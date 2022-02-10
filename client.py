@@ -4,6 +4,7 @@ import errno
 
 class Client():
     def __init__(self, username, password):
+        print("initialized")
         self.HEADER = 16
         self.PORT = 9000
         self.IP = "52.22.56.130"
@@ -30,15 +31,15 @@ class Client():
         self.client_socket.send(message)
         # try:
         username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-        print(username_header)
-        username_length = int(username_header.decode(self.FORMAT).strip())
-        username = self.client_socket.recv(username_length).decode(self.FORMAT)
-        print(username)
-        message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-        message_length = int(message_header.decode(self.FORMAT).strip())
-        message = self.client_socket.recv(message_length).decode(self.FORMAT)
-        print(message)
-        # except:
-        #     print("NO MSG")
-        #     return 0
+        if username_header != "":
+            username_length = int(username_header.strip())
+            username = self.client_socket.recv(username_length).decode(self.FORMAT)
+            print(username)
+            message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
+            message_length = int(message_header.decode(self.FORMAT).strip())
+            message = self.client_socket.recv(message_length).decode(self.FORMAT)
+            print(message)
+        else:
+            print("NO MSG")
+            return 0
         return f'{username}:{message}'
