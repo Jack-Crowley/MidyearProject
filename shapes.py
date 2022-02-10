@@ -255,7 +255,6 @@ class messageObject:
         self.height = 64/pixelratio+(35/pixelratio*(len(self.messages)-2))
 
         self.y=y/pixelratio
-        print(self.y,self.height,len(self.messages))
     
     def draw(self):
         pygame.draw.rect(self.window,(0,255,255),(self.x,self.y-self.indepenty,self.width,self.height),1,1)

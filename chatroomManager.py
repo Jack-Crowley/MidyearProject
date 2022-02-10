@@ -151,4 +151,6 @@ class Chatroom:
 
     def send(self):
         newtext = self.active.getStr()
+        print('debug2')
         self.messageQueue.append(newtext)
+        print('debug1')
