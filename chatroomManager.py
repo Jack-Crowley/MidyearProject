@@ -33,7 +33,8 @@ class Chatroom:
             else:
                 msg = client.send_message("")
             if msg != 0:
-                self.createNewMessage(msg)
+                msg = msg.split(":")
+                self.createNewMessage(msg[0],''.join(msg[1:]))
             self.clock.tick(60)
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
@@ -120,12 +121,13 @@ class Chatroom:
         self.active.linecount=0
         self.active.y = 1000/self.pixelratio
 
-    def createNewMessage(self,msg):
-        a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,"username",msg,30)
+    def createNewMessage(self,username,msg):
+        a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,username,msg,30)
         for i in self.chatroommessages:
             i.indepenty += a.height/self.pixelratio
         self.chatroommessages.append(a)
-        self.active.y = 1000/self.pixelratio
+        if self.active != None:
+            self.active.y = 1000/self.pixelratio
 
     def send(self):
         newtext = self.active.getStr()
