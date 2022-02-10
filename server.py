@@ -27,8 +27,9 @@ def handle_client(conn, addr):
     sockets_list.append(conn)
     ignoreDisconnected = []
     connected = True
+    i=1
     while connected:
-        try:
+        #try:
             msg_len = conn.recv(HEADER).decode(FORMAT)
             if msg_len: 
                 msg_len = int(msg_len)
@@ -36,6 +37,7 @@ def handle_client(conn, addr):
                 if msg: 
                     print(msg)
                 for client_socket in clients:
+                    print(threading.active_count())
                     if threading.active_count() != 2:
                         if client_socket != conn:
                             try:
@@ -45,7 +47,14 @@ def handle_client(conn, addr):
                             except:
                                 ignoreDisconnected.append(client_socket)
                     else:
-                        conn.send("").encode(FORMAT)
+                        #conn.send(f"{'':<16}".encode(FORMAT))
+                        while True:
+                            i = 3-i
+                            if i == 1:
+                                conn.send(f"{'12              batmanbatman4               hell'}".encode(FORMAT))
+                            else:
+                                conn.send("".encode(FORMAT))
+                                print("No MSG")
                     for discon in ignoreDisconnected:
                         del clients[discon]
                     ignoreDisconnected = []
@@ -55,8 +64,8 @@ def handle_client(conn, addr):
                         del clients[conn][0]
                     else:
                         conn.send("".encode(FORMAT))
-        except:
-            connected = False
+        #except:
+        #    connected = False
     
     conn.close()
 
