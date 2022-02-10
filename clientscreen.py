@@ -21,7 +21,7 @@ login = Login(window,clock,pixelratio,validUsernames)
 username = login.username.textMessage
 password = login.password.textMessage
 
-client = Client(username,password)
+# client = Client(username,password)
 
-Chatroom(window,clock,pixelratio,validChars, client)
+Chatroom(window,clock,pixelratio,validChars)
 pygame.display.quit()
