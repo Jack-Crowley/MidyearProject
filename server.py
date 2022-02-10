@@ -40,12 +40,12 @@ def handle_client(conn, addr):
                     print(threading.active_count())
                     if threading.active_count() != 2:
                         if client_socket != conn:
-                            try:
+                            #try:
                                 clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}".encode(FORMAT))
                                 client_socket.send(clients[client_socket][0])
                                 del clients[client_socket][0]
-                            except:
-                                ignoreDisconnected.append(client_socket)
+                            #except:
+                                #ignoreDisconnected.append(client_socket)
                     else:
                         #conn.send(f"{'':<16}".encode(FORMAT))
                         while True:
@@ -54,7 +54,6 @@ def handle_client(conn, addr):
                                 conn.send(f"{'12              batmanbatman4               hell'}".encode(FORMAT))
                             else:
                                 conn.send("".encode(FORMAT))
-                                print("No MSG")
                     for discon in ignoreDisconnected:
                         del clients[discon]
                     ignoreDisconnected = []
