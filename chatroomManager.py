@@ -1,7 +1,7 @@
 import pygame
 from shapes import *
 class Chatroom:
-    def __init__(self, window, clock, pixelratio,validChars):
+    def __init__(self, window, clock, pixelratio,validChars, client):
         self.window = window
 
         self.clock = clock
@@ -37,6 +37,8 @@ class Chatroom:
         self.scrolly = 0
 
         self.buttonsClicked = 0
+
+        self.client = client
 
         while self.run:
             # if self.messageQueue != []:

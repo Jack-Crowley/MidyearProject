@@ -22,11 +22,10 @@ while login.newScreen != None:
     if login.newScreen == "register":
         register = Register(window,clock,pixelratio,validUsernames)
     login = Login(window,clock,pixelratio,validUsernames)
-#register = Register(window,clock,pixelratio,validChars)
 username = login.username.textMessage
 password = login.password.textMessage
 
-#client = Client(username,password)
+client = Client(username,password)
 
-Chatroom(window,clock,pixelratio,validChars)
+Chatroom(window,clock,pixelratio,validChars, client)
 pygame.display.quit()
