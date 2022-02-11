@@ -61,6 +61,7 @@ class InputField:
         self.linecount=0
         self.fullMSG = ""
         self.textList = []
+        self.textMessageList = []
         self.text = pygame.font.SysFont("Orbitron", int(self.size))
         self.changeText()
     
@@ -79,7 +80,7 @@ class InputField:
             self.window.blit(self.textObject,(self.x,self.y+(self.size*self.linecount)))
     
     def click(self,mx,my):
-        if self.x <= mx <= self.x+self.width and self.y <= my <= self.y+self.height:
+        if self.x <= mx <= self.x+self.width and self.y <= my <= self.y+self.height+(self.size*self.linecount):
             return True
         return 
     
@@ -100,10 +101,13 @@ class InputField:
         elif self.mode == "wrap":
             self.textObject = self.text.render(self.textMessage, False, self.textcolor)
             if self.textObject.get_width() > self.width - 5:
+                print('new line')
                 self.textList.append(self.textObject)
-                self.fullMSG += self.textMessage
-                self.textMessage = ""
+                self.textMessageList.append(self.textMessage[:-1])
+                self.fullMSG += self.textMessage[:-1]
+                self.textMessage = self.textMessage[-1]
                 self.linecount += 1
+                self.cursorIndex = 1
                 self.y-=self.height
                 self.textObject = self.text.render(self.textMessage, False, self.textcolor)
 
@@ -122,10 +126,17 @@ class InputField:
         self.changeText()
 
     def addChar(self,char):
-        self.textMessage = self.textMessage[:self.cursorIndex] + char + self.textMessage[self.cursorIndex:]
-        self.cursorIndex+=1
-        self.maxCurrentIndex += 1
-        self.changeText()
+        if self.mode == "wrap":
+            if self.linecount <= 12:
+                self.textMessage = self.textMessage[:self.cursorIndex] + char + self.textMessage[self.cursorIndex:]
+                self.cursorIndex+=1
+                self.maxCurrentIndex += 1
+                self.changeText()
+        else:
+            self.textMessage = self.textMessage[:self.cursorIndex] + char + self.textMessage[self.cursorIndex:]
+            self.cursorIndex+=1
+            self.maxCurrentIndex += 1
+            self.changeText()
 
     def moveCursorLeft(self):
         if self.cursorIndex > 0:
@@ -167,6 +178,8 @@ class InputField:
                 if self.currentIndex <= 0:
                     self.currentIndex=0
                     break
+        if self.cursorIndex == 0:
+                self.backLine()
         self.changeText()
     
     def backspace(self):
@@ -198,9 +211,22 @@ class InputField:
             
             self.addChar("")
 
+    def backLine(self):
+        if len(self.textList) > 0:
+            print('yes', len(self.textList), self.textMessageList)
+            self.textMessage = self.textMessageList[-1]
+            del self.textList[-1]
+            del self.textMessageList[-1]
+            self.linecount -= 1
+            self.fullMSG = self.fullMSG[:len(self.fullMSG)-len(self.textMessage)]
+            self.y += 30
+            self.cursorIndex = len(self.textMessage)
+            self.changeText()
+        
+
     def getStr(self):
         print()
-        return self.textMessage+self.fullMSG
+        return self.fullMSG+self.textMessage
 
 
 class Image:
@@ -253,8 +279,10 @@ class messageObject:
         self.messages = [self.font.render(self.username, False, (2,217,168))]
         self.load_message()
         self.height = 64/pixelratio+(35/pixelratio*(len(self.messages)-2))
-
+        self.relativey = self.height
         self.y=y/pixelratio
+        self.linecount = len(self.messages)
+        self.visible = True
     
     def draw(self):
         pygame.draw.rect(self.window,(0,255,255),(self.x,self.y-self.indepenty,self.width,self.height),1,1)
@@ -266,10 +294,20 @@ class messageObject:
         for i in range(len(self.text)):
             tempMessage += self.text[i]
             self.textObject = self.font.render(tempMessage, False, (255,255,255))
-            if self.textObject.get_width() > self.width:
+            if self.textObject.get_width() > self.width-20:
                 self.messages.append(self.textObject)
                 tempMessage = ""
         self.messages.append(self.font.render(tempMessage, False, (255,255,255)))
 
+    def ChangeVis(self, newThing):
+        self.visible = newThing
 
+    def isActive(self):
+        if self.visible:
+            return True
+        return False
+
+class Placeholder:
+    def __init__(self,y):
+        self.y = y
 

@@ -41,6 +41,9 @@ class Register:
                         elif button.command == "new_screen":
                             if button.click(mousex,mousey):
                                     self.run = False
+                        elif button.command == "register":
+                            if button.click(mousex, mousey):
+                                self.run = False
                 if self.active != None:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_BACKSPACE:
@@ -80,22 +83,23 @@ class Register:
         self.drawables.append(Rectangle(0,0,1920,192,(17,17,17),self.window,self.pixelratio))
         self.drawables.append(Rectangle(576,300,768,700,(17,17,17),self.window,self.pixelratio))
         self.drawables.append(Text("Orbitron",(193,146,252),"PERMEABILITY",self.window,1067,96,self.pixelratio,192))
-        self.drawables.append(Text("Orbitron",(2,217,198),"LOG IN TO CONTINUE",self.window,960,350,self.pixelratio,75))
-        self.drawables.append(Rectangle(726,550,468,15,(2,217,198),self.window,self.pixelratio))
+        self.drawables.append(Text("Orbitron",(2,217,198),"CREATE ACCOUNT",self.window,960,350,self.pixelratio,75))
         self.drawables.append(Image("Images\purple_log_header.png",390,10,150,150,self.window,self.pixelratio))
-        self.createInputField(726,475,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter New Username...",(193,146,252),self.validChars,75)
 
-        self.createInputField(726,600,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"password","Enter New Password...",(193,146,252),self.validChars,75)
+        self.createInputField(726,400,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter Username...",(193,146,252),self.validChars,75)
+        self.drawables.append(Rectangle(726,475,468,15,(2,217,198),self.window,self.pixelratio))
+
+        self.createInputField(726,500,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"password","Enter Password...",(193,146,252),self.validChars,75)
+        self.drawables.append(Rectangle(726,575,468,15,(2,217,198),self.window,self.pixelratio))
+
+        self.createInputField(726,600,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"password","Confirm Password...",(193,146,252),self.validChars,75)
         self.drawables.append(Rectangle(726,675,468,15,(2,217,198),self.window,self.pixelratio))
 
-        self.createInputField(726,600,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"password","Confirm New Password...",(193,146,252),self.validChars,75)
-        self.drawables.append(Rectangle(726,675,468,15,(2,217,198),self.window,self.pixelratio))
+        self.createButton(726,720,468,75,(193,146,252),self.window,self.pixelratio,command="new_screen")
+        self.drawables.append(Text("Orbitron",(255,255,255), "BACK",self.window,960,757,self.pixelratio,75))
 
-        self.createButton(726,740,468,75,(193,146,252),self.window,self.pixelratio,command="new_screen")
-        self.drawables.append(Text("Orbitron",(255,255,255), "CREATE",self.window,960,777,self.pixelratio,75))
-
-        self.createButton(726,855,468,75,(193,146,252),self.window,self.pixelratio,command="")
-        self.drawables.append(Text("Orbitron",(255,255,255), "REGISTER",self.window,960,892,self.pixelratio,75))
+        self.createButton(726,825,468,75,(193,146,252),self.window,self.pixelratio,command="register")
+        self.drawables.append(Text("Orbitron",(255,255,255), "REGISTER",self.window,960,862,self.pixelratio,75))
 
     def createButton(self,x,y,width,height,color,window,pixelratio,command):
         tempButton = Button(x,y,width,height,color,window,pixelratio,command)
