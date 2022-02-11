@@ -4,6 +4,7 @@ from loginscreen import Login
 from registerscreen import Register
 from client import Client
 
+
 window = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 
@@ -17,11 +18,15 @@ pixelratio = 1920/MWIDTH
 pygame.font.init()
 
 login = Login(window,clock,pixelratio,validUsernames)
+while login.newScreen != None:
+    if login.newScreen == "register":
+        register = Register(window,clock,pixelratio,validUsernames)
+    login = Login(window,clock,pixelratio,validUsernames)
 #register = Register(window,clock,pixelratio,validChars)
 username = login.username.textMessage
 password = login.password.textMessage
 
-# client = Client(username,password)
+#client = Client(username,password)
 
 Chatroom(window,clock,pixelratio,validChars)
 pygame.display.quit()
