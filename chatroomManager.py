@@ -17,8 +17,8 @@ class Chatroom:
         self.miny = -200
         self.maxy = 930
 
-        self.downarrowcount, self.downarrowvelocity = 0, 0
-        self.uparrowcount, self.uparrowvelocity = 0, 0
+        self.downarrowcount, self.downarrowvelocity = 0, 1
+        self.uparrowcount, self.uparrowvelocity = 0, 1
 
 
         self.chatroomclickables = []
@@ -107,14 +107,13 @@ class Chatroom:
                 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
-                                print('yes')
-                                print(self.chatroommessages[-1].y)
-                                self.moveBox(-20)
+                            if len(self.chatroommessages):
+                                if self.chatroommessages[0].y < 1000:
+                                    print(self.chatroommessages[-1].y)
+                                    self.moveBox(-20)
                     elif event.key == pygame.K_DOWN:
                         if self.scrolly > 0:
-                            self.moveBox(20)
-            pygame.display.update()
-            
+                            self.moveBox(20)            
             if self.active != None:
                 self.textboxy = self.active.y
                 for i in self.chatroommessages:
@@ -129,10 +128,8 @@ class Chatroom:
                     if keys[ord(i)]:
                         self.active.letter(i)
             if keys[pygame.K_UP]:
-                print('up')
                 self.up()
             if keys[pygame.K_DOWN]:
-                print('down')
                 self.down()
             self.draw()
     
@@ -207,13 +204,15 @@ class Chatroom:
             if self.downarrowcount > 1:
                 self.downarrowcount = 0
                 self.downarrowvelocity += 0.5
-                
                 self.moveBox(20)
     
     def up(self):
+        print(self.uparrowcount)
         self.uparrowcount += 0.07*self.uparrowvelocity
         if self.uparrowcount > 1:
             self.uparrowcount = 0
             self.uparrowvelocity += 0.5
-            
-            self.moveBox(-20)
+            if len(self.chatroommessages):
+                if self.chatroommessages[0].indepenty > 50:
+                    print(self.chatroommessages[0].indepenty, "y value")
+                    self.moveBox(-20)
