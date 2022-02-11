@@ -1,7 +1,7 @@
 import pygame
 from shapes import *
 class Chatroom:
-    def __init__(self, window, clock, pixelratio,validChars, client):
+    def __init__(self, window, clock, pixelratio,validChars):
         self.window = window
 
         self.clock = clock
@@ -17,8 +17,8 @@ class Chatroom:
         self.miny = -200
         self.maxy = 930
 
-        self.downarrowcount, self.downarrowvelocity = 0, 0
-        self.uparrowcount, self.uparrowvelocity = 0, 0
+        self.downarrowcount, self.downarrowvelocity = 0, 1
+        self.uparrowcount, self.uparrowvelocity = 0, 1
 
 
         self.chatroomclickables = []
@@ -37,8 +37,6 @@ class Chatroom:
         self.scrolly = 0
 
         self.buttonsClicked = 0
-
-        self.client = client
 
         while self.run:
             if self.messageQueue != []:
@@ -108,14 +106,13 @@ class Chatroom:
                 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
-                                print('yes')
-                                print(self.chatroommessages[-1].y)
-                                self.moveBox(-20)
+                            if len(self.chatroommessages):
+                                if self.chatroommessages[0].y < 1000:
+                                    print(self.chatroommessages[-1].y)
+                                    self.moveBox(-20)
                     elif event.key == pygame.K_DOWN:
                         if self.scrolly > 0:
-                            self.moveBox(20)
-            pygame.display.update()
-            
+                            self.moveBox(20)            
             if self.active != None:
                 self.textboxy = self.active.y
                 for i in self.chatroommessages:
@@ -130,10 +127,8 @@ class Chatroom:
                     if keys[ord(i)]:
                         self.active.letter(i)
             if keys[pygame.K_UP]:
-                print('up')
                 self.up()
             if keys[pygame.K_DOWN]:
-                print('down')
                 self.down()
             self.draw()
     
@@ -155,7 +150,7 @@ class Chatroom:
         self.chatroomdrawables.append(Text("Orbitron",(193,146,252),"USERS",self.window,200,175,self.pixelratio,75))
         self.chatroomdrawables.append(Rectangle(75,200,250,10,(193,146,252),self.window,self.pixelratio))
         self.chatroomdrawables.append(Rectangle(450,1000,1000,80,(27,27,27),self.window,self.pixelratio))
-        self.createInputField(450,1000,1000,30,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,30)
+        self.createInputField(450,990,1000,40,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,40)
         self.createButton(1880,0,40,40,(0,0,0),self.window,self.pixelratio,"exit")
 
     def createInputField(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size):
@@ -208,13 +203,15 @@ class Chatroom:
             if self.downarrowcount > 1:
                 self.downarrowcount = 0
                 self.downarrowvelocity += 0.5
-                
                 self.moveBox(20)
     
     def up(self):
+        print(self.uparrowcount)
         self.uparrowcount += 0.07*self.uparrowvelocity
         if self.uparrowcount > 1:
             self.uparrowcount = 0
             self.uparrowvelocity += 0.5
-            
-            self.moveBox(-20)
+            if len(self.chatroommessages):
+                if self.chatroommessages[0].indepenty > 50:
+                    print(self.chatroommessages[0].indepenty, "y value")
+                    self.moveBox(-20)
