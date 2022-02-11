@@ -1,7 +1,7 @@
 import pygame
 from shapes import *
 class Chatroom:
-    def __init__(self, window, clock, pixelratio,validChars, client):
+    def __init__(self, window, clock, pixelratio,validChars):
         self.window = window
 
         self.clock = clock
@@ -37,8 +37,6 @@ class Chatroom:
         self.scrolly = 0
 
         self.buttonsClicked = 0
-
-        self.client = client
 
         while self.run:
             # if self.messageQueue != []:
@@ -153,7 +151,7 @@ class Chatroom:
         self.chatroomdrawables.append(Text("Orbitron",(193,146,252),"USERS",self.window,200,175,self.pixelratio,75))
         self.chatroomdrawables.append(Rectangle(75,200,250,10,(193,146,252),self.window,self.pixelratio))
         self.chatroomdrawables.append(Rectangle(450,1000,1000,80,(27,27,27),self.window,self.pixelratio))
-        self.createInputField(450,1000,1000,30,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,30)
+        self.createInputField(450,990,1000,40,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,40)
         self.createButton(1880,0,40,40,(0,0,0),self.window,self.pixelratio,"exit")
 
     def createInputField(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size):
