@@ -47,14 +47,7 @@ def handle_client(conn, addr):
                             except:
                                 ignoreDisconnected.append(client_socket)
                     else:
-                        #conn.send(f"{'':<16}".encode(FORMAT))
-                        while True:
-                            i = 3-i
-                            if i == 1:
-                                conn.send(f"{'12              batmanbatman4               hell'}".encode(FORMAT))
-                            else:
-                                conn.send("".encode(FORMAT))
-                                print("No MSG")
+                        conn.send(f"{'':<16}".encode(FORMAT))
                     for discon in ignoreDisconnected:
                         del clients[discon]
                     ignoreDisconnected = []
