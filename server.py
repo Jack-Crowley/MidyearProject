@@ -27,7 +27,6 @@ def handle_client(conn, addr):
     sockets_list.append(conn)
     ignoreDisconnected = []
     connected = True
-    i=1
     while connected:
         #try:
             msg_len = conn.recv(HEADER).decode(FORMAT)
@@ -36,6 +35,7 @@ def handle_client(conn, addr):
                 msg = conn.recv(msg_len).decode(FORMAT)
                 if msg: 
                     print(msg)
+                print(clients)
                 for client_socket in clients:
                     print(threading.active_count())
                     if threading.active_count() != 2:

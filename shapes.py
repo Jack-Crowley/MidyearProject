@@ -101,7 +101,6 @@ class InputField:
         elif self.mode == "wrap":
             self.textObject = self.text.render(self.textMessage, False, self.textcolor)
             if self.textObject.get_width() > self.width - 5:
-                print('new line')
                 self.textList.append(self.textObject)
                 self.textMessageList.append(self.textMessage[:-1])
                 self.fullMSG += self.textMessage[:-1]

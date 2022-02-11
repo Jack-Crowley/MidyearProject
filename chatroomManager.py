@@ -41,14 +41,13 @@ class Chatroom:
         self.client = client
 
         while self.run:
-            # if self.messageQueue != []:
-            #     msg = client.send_message(self.messageQueue[0])
-            #     del(self.messageQueue[0])
-            # else:
-            #     msg = client.send_message("")
-            # if msg != 0:
-            #     msg = msg.split(":")
-            #     self.createNewMessage(msg[0],''.join(msg[1:]))
+            if self.messageQueue != []:
+                msg = client.send_message(self.messageQueue[0])
+                del(self.messageQueue[0])
+            else:
+                msg = client.send_message("")
+            if msg != 0:
+                self.createNewMessage(msg[0],''.join(msg[1:]))
             self.clock.tick(60)
             mousex,mousey = pygame.mouse.get_pos()
             keys = pygame.key.get_pressed()
