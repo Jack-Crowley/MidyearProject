@@ -33,10 +33,10 @@ def handle_client(conn, addr):
             if msg_len: 
                 msg_len = int(msg_len)
                 msg = conn.recv(msg_len).decode(FORMAT)
-                if msg != "比": 
+                if msg != "发送": 
                     print(msg, "message")
-                    for client_socket in clients:
-                        if threading.active_count() != 2:
+                    if threading.active_count() != 2:
+                        for client_socket in clients:
                             if client_socket != conn:
                                 #try:
                                     clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}".encode(FORMAT))
@@ -44,11 +44,11 @@ def handle_client(conn, addr):
                                     del clients[client_socket][0]
                                 #except:
                                     #ignoreDisconnected.append(client_socket)
-                        else:
-                            conn.send(f"{'':<16}".encode(FORMAT))
-                        for discon in ignoreDisconnected:
-                            del clients[discon]
-                        ignoreDisconnected = []
+                    else:
+                        conn.send(f"{'发送':<16}".encode(FORMAT))
+                    for discon in ignoreDisconnected:
+                        del clients[discon]
+                    ignoreDisconnected = []
                 else:
                     if clients[conn] != []:
                         conn.send(clients[conn][0])
@@ -56,7 +56,7 @@ def handle_client(conn, addr):
                     else:
                         conn.send("发送".encode(FORMAT))
             else:
-                connection = False
+                connected = False
         #except:
         #    connected = False
     
