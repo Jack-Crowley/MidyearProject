@@ -6,7 +6,7 @@ class Client():
     def __init__(self, username, password):
         self.HEADER = 16
         self.PORT = 9000
-        self.IP = socket.gethostbyname(socket.gethostname())
+        self.IP = "3.222.3.116"
         self.ADDR = (self.IP, self.PORT)
         self.FORMAT = 'utf-8'
         self.msg = ""
@@ -40,7 +40,7 @@ class Client():
             message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
             message_length = int(message_header.strip())
             message = self.client_socket.recv(message_length).decode(self.FORMAT)
-            if message != "比":
+            if message != "发送":
                 return f'{username}:{message}'
             else:
                 return 0

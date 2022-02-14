@@ -54,7 +54,7 @@ def handle_client(conn, addr):
                         conn.send(clients[conn][0])
                         del clients[conn][0]
                     else:
-                        conn.send("比".encode(FORMAT))
+                        conn.send("发送".encode(FORMAT))
             else:
                 connection = False
         #except:
