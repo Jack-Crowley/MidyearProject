@@ -44,7 +44,7 @@ class Chatroom:
                 msg = client.send_message(self.messageQueue[0])
                 del(self.messageQueue[0])
             else:
-                msg = client.send_message("比")
+                msg = client.send_message("hi")
             if msg != 0:
                 self.createNewMessage(msg[0],''.join(msg[1:]))
             self.clock.tick(60)
@@ -189,9 +189,7 @@ class Chatroom:
 
     def send(self):
         newtext = self.active.getStr()
-        print('debug2')
         self.messageQueue.append(newtext)
-        print('debug1')
 
     def moveBox(self, num):
         for i in self.chatroommessages:
