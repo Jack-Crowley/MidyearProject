@@ -31,9 +31,10 @@ class Client():
         self.client_socket.send(send_length)
         self.client_socket.send(message)
         # try:
-        username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-        if username_header != "发送":
-            username_length = int(username_header.strip())
+        username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT).strip()
+        print(username_header)
+        if username_header != "hi":
+            username_length = int(username_header)
             username = self.client_socket.recv(username_length).decode(self.FORMAT)
             message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
             message_length = int(message_header.strip())
