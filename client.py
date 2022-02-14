@@ -32,16 +32,15 @@ class Client():
         self.client_socket.send(message)
         # try:
         username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-        if username_header:
+        if username_header != "发送":
             username_length = int(username_header.strip())
             username = self.client_socket.recv(username_length).decode(self.FORMAT)
             message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
             message_length = int(message_header.strip())
             message = self.client_socket.recv(message_length).decode(self.FORMAT)
-            if message != "发送":
-                return f'{username}:{message}'
-            else:
-                return 0
+            return f'{username}:{message}'
+        else:
+            return 0
         # except:
         print("no message")
         return 0

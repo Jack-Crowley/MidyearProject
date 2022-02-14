@@ -39,8 +39,12 @@ def handle_client(conn, addr):
                         for client_socket in clients:
                             if client_socket != conn:
                                 #try:
-                                    clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}".encode(FORMAT))
-                                    client_socket.send(clients[client_socket][0])
+                                    clients[client_socket].append(f"{user['header']:<{HEADER}}:{user['data']}:{msg_len:<{HEADER}}:{msg}".encode(FORMAT))
+                                    split_msg = clients[client_socket][0].split(":")
+                                    client_socket.send(split_msg[0].encode(FORMAT))
+                                    client_socket.send(split_msg[1].encode(FORMAT))
+                                    client_socket.send(split_msg[2].encode(FORMAT))
+                                    client_socket.send(''.join(split_msg[3:]).encode(FORMAT))
                                     del clients[client_socket][0]
                                 #except:
                                     #ignoreDisconnected.append(client_socket)
@@ -51,7 +55,11 @@ def handle_client(conn, addr):
                     ignoreDisconnected = []
                 else:
                     if clients[conn] != []:
-                        conn.send(clients[conn][0])
+                        split_msg = clients[client_socket][0].split(":")
+                        client_socket.send(split_msg[0].encode(FORMAT))
+                        client_socket.send(split_msg[1].encode(FORMAT))
+                        client_socket.send(split_msg[2].encode(FORMAT))
+                        client_socket.send(''.join(split_msg[3:]).encode(FORMAT))
                         del clients[conn][0]
                     else:
                         conn.send("发送".encode(FORMAT))
