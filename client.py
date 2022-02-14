@@ -3,13 +3,14 @@ import threading
 import errno
 
 class Client():
-    def __init__(self, username, password):
+    def __init__(self, username, password, nstring):
         self.HEADER = 16
         self.PORT = 9000
-        self.IP = socket.gethostbyname(socket.gethostname())
+        self.IP = "52.22.56.130"
         self.ADDR = (self.IP, self.PORT)
         self.FORMAT = 'utf-8'
         self.msg = ""
+        self.nstring = nstring
 
         self.my_username = username
 
@@ -32,8 +33,7 @@ class Client():
         self.client_socket.send(message)
         # try:
         username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT).strip()
-        print(username_header)
-        if username_header != "hi":
+        if username_header != self.nstring:
             username_length = int(username_header)
             username = self.client_socket.recv(username_length).decode(self.FORMAT)
             message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)

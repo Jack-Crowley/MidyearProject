@@ -17,6 +17,8 @@ pixelratio = 1920/MWIDTH
 
 pygame.font.init()
 
+with open('nothing.txt') as data: nstring = data.read().strip()
+
 login = Login(window,clock,pixelratio,validUsernames)
 while login.newScreen != None:
     if login.newScreen == "register":
@@ -25,7 +27,7 @@ while login.newScreen != None:
 username = login.username.textMessage
 password = login.password.textMessage
 
-client = Client(username,password)
+client = Client(username,password, nstring)
 
-Chatroom(window,clock,pixelratio,validChars,client)
+Chatroom(window,clock,pixelratio,validChars,client, nstring)
 pygame.display.quit()

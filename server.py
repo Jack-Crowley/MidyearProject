@@ -14,6 +14,8 @@ server_socket.bind(ADDR)
 sockets_list = [server_socket]
 clients = {}
 
+with open('nothing.txt') as data: nstring = data.read().strip()
+
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
 
@@ -34,7 +36,7 @@ def handle_client(conn, addr):
             if msg_len: 
                 msg_len = int(msg_len)
                 msg = conn.recv(msg_len).decode(FORMAT)
-                if msg != "hi": 
+                if msg != nstring: 
                     print(msg, "message")
                     if threading.active_count() != 2:
                         for client_socket in clients:
@@ -51,13 +53,12 @@ def handle_client(conn, addr):
                                 #except:
                                     #ignoreDisconnected.append(client_socket)
                     else:
-                        conn.send(f"{'hi':<{HEADER}}".encode(FORMAT))
+                        conn.send(f"{nstring:<{HEADER}}".encode(FORMAT))
                         print('we do not know why it broke')
                     for discon in ignoreDisconnected:
                         del clients[discon]
                     ignoreDisconnected = []
                 else:
-                    print('no msg')
                     if len(clients[conn]) != 0:
                         print('msg queue is not empty')
                         split_msg = clients[client_socket][0].split(":")
@@ -67,7 +68,7 @@ def handle_client(conn, addr):
                         client_socket.send(''.join(split_msg[3:]).encode(FORMAT))
                         del clients[conn][0]
                     else:
-                        conn.send("hi".encode(FORMAT))
+                        conn.send(nstring.encode(FORMAT))
             else:
                 connected = False
         #except:
