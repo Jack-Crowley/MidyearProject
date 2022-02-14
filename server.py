@@ -33,7 +33,7 @@ def handle_client(conn, addr):
             if msg_len: 
                 msg_len = int(msg_len)
                 msg = conn.recv(msg_len).decode(FORMAT)
-                if msg != "发送": 
+                if msg != "hi": 
                     print(msg, "message")
                     if threading.active_count() != 2:
                         for client_socket in clients:
@@ -49,7 +49,7 @@ def handle_client(conn, addr):
                                 #except:
                                     #ignoreDisconnected.append(client_socket)
                     else:
-                        conn.send(f"{'发送':<16}".encode(FORMAT))
+                        conn.send(f"{'hi':<16}".encode(FORMAT))
                     for discon in ignoreDisconnected:
                         del clients[discon]
                     ignoreDisconnected = []
@@ -62,7 +62,7 @@ def handle_client(conn, addr):
                         client_socket.send(''.join(split_msg[3:]).encode(FORMAT))
                         del clients[conn][0]
                     else:
-                        conn.send("发送".encode(FORMAT))
+                        conn.send("hi".encode(FORMAT))
             else:
                 connected = False
         #except:
