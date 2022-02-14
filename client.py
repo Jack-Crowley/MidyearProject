@@ -6,7 +6,7 @@ class Client():
     def __init__(self, username, password):
         self.HEADER = 16
         self.PORT = 9000
-        self.IP = "3.222.3.116"
+        self.IP = socket.gethostbyname(socket.gethostname())
         self.ADDR = (self.IP, self.PORT)
         self.FORMAT = 'utf-8'
         self.msg = ""
@@ -25,23 +25,23 @@ class Client():
 
     def send_message(self, msg):
         message = msg.encode(self.FORMAT)
-        if message:
-            msg_length = len(message)
-            send_length = str(msg_length).encode(self.FORMAT)
-            send_length += b' ' * (self.HEADER - len(send_length))
-            print(message)
-            self.client_socket.send(self.username_header+self.username+send_length+message)
-        try:
-            username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-            print(username_header)
-            if username_header:
-                username_length = int(username_header.strip())
-                username = self.client_socket.recv(username_length).decode(self.FORMAT)
-                message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-                message_length = int(message_header.strip())
-                message = self.client_socket.recv(message_length).decode(self.FORMAT)
+        msg_length = len(message)
+        send_length = str(msg_length).encode(self.FORMAT)
+        send_length += b' ' * (self.HEADER - len(send_length))
+        self.client_socket.send(self.username_header+self.username+send_length+message)
+        # try:
+        username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
+        if username_header:
+            username_length = int(username_header.strip())
+            username = self.client_socket.recv(username_length).decode(self.FORMAT)
+            message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
+            message_length = int(message_header.strip())
+            message = self.client_socket.recv(message_length).decode(self.FORMAT)
+            if message != "比":
                 return f'{username}:{message}'
-        except:
-            print("no message")
-            return 0
+            else:
+                return 0
+        # except:
+        print("no message")
+        return 0
         

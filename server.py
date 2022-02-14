@@ -33,30 +33,30 @@ def handle_client(conn, addr):
             if msg_len: 
                 msg_len = int(msg_len)
                 msg = conn.recv(msg_len).decode(FORMAT)
-                if msg: 
-                    print(msg)
-                print(clients)
-                for client_socket in clients:
-                    print(threading.active_count())
-                    if threading.active_count() != 2:
-                        if client_socket != conn:
-                            #try:
-                                clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}".encode(FORMAT))
-                                client_socket.send(clients[client_socket][0])
-                                del clients[client_socket][0]
-                            #except:
-                                #ignoreDisconnected.append(client_socket)
-                    else:
-                        conn.send(f"{'':<16}".encode(FORMAT))
-                    for discon in ignoreDisconnected:
-                        del clients[discon]
-                    ignoreDisconnected = []
+                if msg != "比": 
+                    print(msg, "message")
+                    for client_socket in clients:
+                        if threading.active_count() != 2:
+                            if client_socket != conn:
+                                #try:
+                                    clients[client_socket].append(f"{user['header']:<{HEADER}}{user['data']}{msg_len:<{HEADER}}{msg}".encode(FORMAT))
+                                    client_socket.send(clients[client_socket][0])
+                                    del clients[client_socket][0]
+                                #except:
+                                    #ignoreDisconnected.append(client_socket)
+                        else:
+                            conn.send(f"{'':<16}".encode(FORMAT))
+                        for discon in ignoreDisconnected:
+                            del clients[discon]
+                        ignoreDisconnected = []
                 else:
                     if clients[conn] != []:
                         conn.send(clients[conn][0])
                         del clients[conn][0]
                     else:
-                        conn.send("".encode(FORMAT))
+                        conn.send("比".encode(FORMAT))
+            else:
+                connection = False
         #except:
         #    connected = False
     

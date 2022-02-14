@@ -1,7 +1,7 @@
 import pygame
 from shapes import *
 class Chatroom:
-    def __init__(self, window, clock, pixelratio,validChars):
+    def __init__(self, window, clock, pixelratio,validChars,client):
         self.window = window
 
         self.clock = clock
@@ -20,6 +20,7 @@ class Chatroom:
         self.downarrowcount, self.downarrowvelocity = 0, 1
         self.uparrowcount, self.uparrowvelocity = 0, 1
 
+        self.client = client
 
         self.chatroomclickables = []
         self.chatroomdrawables = []
@@ -43,7 +44,7 @@ class Chatroom:
                 msg = client.send_message(self.messageQueue[0])
                 del(self.messageQueue[0])
             else:
-                msg = client.send_message("")
+                msg = client.send_message("比")
             if msg != 0:
                 self.createNewMessage(msg[0],''.join(msg[1:]))
             self.clock.tick(60)

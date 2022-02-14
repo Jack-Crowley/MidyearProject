@@ -25,7 +25,7 @@ while login.newScreen != None:
 username = login.username.textMessage
 password = login.password.textMessage
 
-# client = Client(username,password)
+client = Client(username,password)
 
-Chatroom(window,clock,pixelratio,validChars)
+Chatroom(window,clock,pixelratio,validChars,client)
 pygame.display.quit()
