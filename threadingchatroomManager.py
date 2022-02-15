@@ -47,6 +47,9 @@ class Chatroom:
 
         while self.run:
             self.clock.tick(60)
+            if len(self.client.recievingQueue) != 0:
+                self.createNewMessage(self.client.recievingQueue[0][0], self.client.recievingQueue[0][1])
+                del self.client.recievingQueue[0]
             mousex,mousey = pygame.mouse.get_pos()
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():

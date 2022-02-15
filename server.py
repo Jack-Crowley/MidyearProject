@@ -46,7 +46,6 @@ def handle_client(conn, addr):
                                 try:
                                     clients[client_socket].append(f"{user['header']:<{HEADER}}:{user['data']}:{msg_len:<{HEADER}}:{msg}")
                                     split_msg = clients[client_socket][0].split(":")
-                                    print(split_msg)
                                     client_socket.send(split_msg[0].encode(FORMAT))
                                     client_socket.send(split_msg[1].encode(FORMAT))
                                     client_socket.send(split_msg[2].encode(FORMAT))
