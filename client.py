@@ -6,7 +6,7 @@ class Client():
     def __init__(self, username, password, nstring):
         self.HEADER = 16
         self.PORT = 9000
-        self.IP = "52.22.56.130"
+        self.IP = "3.222.3.116"
         self.ADDR = (self.IP, self.PORT)
         self.FORMAT = 'utf-8'
         self.msg = ""
@@ -32,9 +32,9 @@ class Client():
         self.client_socket.send(send_length)
         self.client_socket.send(message)
         # try:
-        username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT).strip()
+        username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
         if username_header != self.nstring:
-            username_length = int(username_header)
+            username_length = int(username_header.strip())
             username = self.client_socket.recv(username_length).decode(self.FORMAT)
             message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
             message_length = int(message_header.strip())
