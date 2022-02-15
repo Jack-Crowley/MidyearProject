@@ -265,7 +265,7 @@ class Text:
         self.message = newMessage
     
 class messageObject:
-    def __init__(self,x,y,width,color,window,pixelratio,username,text,size):
+    def __init__(self,x,y,width,color,window,pixelratio,username,text,size, bordercolor):
         self.x=x/pixelratio
         self.width=width/pixelratio
         self.color=color
@@ -274,6 +274,7 @@ class messageObject:
         self.username=username
         self.text=text
         self.size = size/pixelratio
+        self.bordercolor = bordercolor
         self.font = pygame.font.SysFont("Orbitron", int(self.size))
         self.messages = [self.font.render(self.username, False, (2,217,168))]
         self.load_message()
@@ -284,7 +285,7 @@ class messageObject:
         self.visible = True
     
     def draw(self):
-        pygame.draw.rect(self.window,(0,255,255),(self.x,self.y-self.indepenty,self.width,self.height),1,1)
+        pygame.draw.rect(self.window,self.bordercolor,(self.x,self.y-self.indepenty,self.width,self.height),1,1)
         for i in range(len(self.messages)):
             self.window.blit(self.messages[i],(self.x,self.y+(i*self.size)-self.indepenty))
 
