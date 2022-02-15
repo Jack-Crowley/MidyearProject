@@ -43,7 +43,6 @@ def handle_client(conn, addr):
                             if client_socket != conn:
                                 try:
                                     clients[client_socket].append(f"{user['header']:<{HEADER}}:{user['data']}:{msg_len:<{HEADER}}:{msg}")
-                                    print(clients[client_socket][-1])
                                     split_msg = clients[client_socket][0].split(":")
                                     print(split_msg)
                                     client_socket.send(split_msg[0].encode(FORMAT))

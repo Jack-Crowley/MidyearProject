@@ -32,9 +32,9 @@ class Client():
         self.client_socket.send(send_length)
         self.client_socket.send(message)
         # try:
-        username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT).strip()
+        username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
         if username_header != self.nstring:
-            username_length = int(username_header)
+            username_length = int(username_header.strip())
             username = self.client_socket.recv(username_length).decode(self.FORMAT)
             message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
             message_length = int(message_header.strip())
