@@ -1,5 +1,5 @@
 import pygame
-from chatroomManager import Chatroom
+from threadingchatroomManager import Chatroom
 from loginscreen import Login
 from registerscreen import Register
 from threadingclient import Client
@@ -28,7 +28,7 @@ username = login.username.textMessage
 print(username)
 password = login.password.textMessage
 
-client = Client(username,password, nstring)
+client = Client(username,password)
 
-Chatroom(window,clock,pixelratio,validChars,client, nstring, username)
+Chatroom(window,clock,pixelratio,validChars,client, username)
 pygame.display.quit()

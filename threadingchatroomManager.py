@@ -40,9 +40,9 @@ class Chatroom:
         self.buttonsClicked = 0
 
         msg = ""
-        sending = threading.Thread(target = self.client.send_message, args = (client, msg))
+        sending = threading.Thread(target = self.client.send_message, args = (msg,))
         sending.start()
-        recieving = threading.Thread(target = self.client.recieve_message, args = (client))
+        recieving = threading.Thread(target = self.client.recieve_message, args = ())
         recieving.start()
 
         while self.run:

@@ -27,6 +27,7 @@ class Client():
     def send_message(self, msg):
         while True:
             if self.messageQueue != []:
+                print(self.messageQueue)
                 msg = self.messageQueue[0]
                 del(self.messageQueue[0])
             else:
@@ -40,7 +41,6 @@ class Client():
                 self.client_socket.send(message)
     
     def recieve_message(self):
-        while True:
             try:
                 username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
                 username_length = int(username_header.strip())
