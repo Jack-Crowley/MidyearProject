@@ -37,6 +37,7 @@ def handle_client(conn, addr):
             if msg_len: 
                 msg_len = int(msg_len)
                 msg = conn.recv(msg_len).decode(FORMAT)
+                print(msg)
                 if msg != nstring: 
                     print(msg, "message")
                     if threading.active_count() != 2:
@@ -45,7 +46,6 @@ def handle_client(conn, addr):
                                 try:
                                     clients[client_socket].append(f"{user['header']:<{HEADER}}:{user['data']}:{msg_len:<{HEADER}}:{msg}")
                                     split_msg = clients[client_socket][0].split(":")
-                                    print(split_msg)
                                     client_socket.send(split_msg[0].encode(FORMAT))
                                     client_socket.send(split_msg[1].encode(FORMAT))
                                     client_socket.send(split_msg[2].encode(FORMAT))

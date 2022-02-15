@@ -11,6 +11,7 @@ class Client():
         self.FORMAT = 'utf-8'
         self.msg = ""
         self.messageQueue = []
+        self.recievingQueue = []
 
         self.my_username = username
 
@@ -49,7 +50,7 @@ class Client():
                 message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
                 message_length = int(message_header.strip())
                 message = self.client_socket.recv(message_length).decode(self.FORMAT)
-                return f'{username}:{message}'
+                self.recievingQueue.append([username, message])
             except:
-                return 0
+                pass
         

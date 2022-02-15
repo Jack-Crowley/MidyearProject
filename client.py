@@ -9,7 +9,7 @@ class Client():
         # Parth IP
         self.IP = "3.222.3.116"
         # Jack IP
-        # self.IP = "52.22.56.130"
+        #self.IP = "52.22.56.130"
         # Computer IP
         # self.IP = socket.gethostbyname(socket.gethostname())
         self.ADDR = (self.IP, self.PORT)
