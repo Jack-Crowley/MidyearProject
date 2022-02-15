@@ -2,7 +2,7 @@ import pygame
 from threadingchatroomManager import Chatroom
 from loginscreen import Login
 from registerscreen import Register
-from threading import Client
+from threadingclient import Client
 
 
 window = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
