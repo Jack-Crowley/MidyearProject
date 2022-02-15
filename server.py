@@ -54,13 +54,11 @@ def handle_client(conn, addr):
                                     #ignoreDisconnected.append(client_socket)
                     else:
                         conn.send(f"{nstring:<{HEADER}}".encode(FORMAT))
-                        print('we do not know why it broke')
                     for discon in ignoreDisconnected:
                         del clients[discon]
                     ignoreDisconnected = []
                 else:
                     if len(clients[conn]) != 0:
-                        print('msg queue is not empty')
                         split_msg = clients[client_socket][0].split(":")
                         client_socket.send(split_msg[0].encode(FORMAT))
                         client_socket.send(split_msg[1].encode(FORMAT))
