@@ -6,7 +6,12 @@ class Client():
     def __init__(self, username, password, nstring):
         self.HEADER = 16
         self.PORT = 9000
-        self.IP = "3.222.3.116"
+        # Parth IP
+        # self.IP = "3.222.3.116"
+        # Jack IP
+        self.IP = "52.22.56.130"
+        # Computer IP
+        # self.IP = socket.gethostbyname(socket.gethostname())
         self.ADDR = (self.IP, self.PORT)
         self.FORMAT = 'utf-8'
         self.msg = ""
