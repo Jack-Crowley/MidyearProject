@@ -37,6 +37,7 @@ def handle_client(conn, addr):
             if msg_len: 
                 msg_len = int(msg_len)
                 msg = conn.recv(msg_len).decode(FORMAT)
+                print(msg)
                 if msg != nstring: 
                     print(msg, "message")
                     if threading.active_count() != 2:
