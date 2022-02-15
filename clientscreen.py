@@ -25,6 +25,7 @@ while login.newScreen != None:
         register = Register(window,clock,pixelratio,validUsernames)
     login = Login(window,clock,pixelratio,validUsernames)
 username = login.username.textMessage
+print(username)
 password = login.password.textMessage
 
 client = Client(username,password, nstring)

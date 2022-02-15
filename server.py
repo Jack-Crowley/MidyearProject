@@ -24,6 +24,7 @@ def handle_client(conn, addr):
         message_length = msg_len.decode(FORMAT)
         message_length = int(message_length)
         user = {'header': message_length, 'data': conn.recv(message_length).decode(FORMAT)}
+        print(user['data'])
     except:
         print('unable to get username')
     

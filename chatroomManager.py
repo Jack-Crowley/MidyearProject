@@ -11,8 +11,6 @@ class Chatroom:
 
         print(self.pixelratio)
 
-
-        self.username = username
         self.messageQueue = []
 
         self.validChars = validChars
@@ -22,6 +20,8 @@ class Chatroom:
 
         self.downarrowcount, self.downarrowvelocity = 0, 1
         self.uparrowcount, self.uparrowvelocity = 0, 1
+
+        self.username = username
 
         self.client = client
 
