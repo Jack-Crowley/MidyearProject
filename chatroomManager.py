@@ -32,7 +32,7 @@ class Chatroom:
 
         self.run = True
         
-        self.exitButtons = [pygame.transform.scale(pygame.image.load("Images\\x_black.png"), (40/self.pixelratio, 40/self.pixelratio)), pygame.transform.scale(pygame.image.load("Images\\x.png"), (40/self.pixelratio, 40/self.pixelratio))]
+        self.exitButtons = [pygame.transform.scale(pygame.image.load("Images\\x_black.png"), (int(40/self.pixelratio), int(40/self.pixelratio))), pygame.transform.scale(pygame.image.load("Images\\x.png"), (int(40/self.pixelratio), int(40/self.pixelratio)))]
 
         self.active = None
 
