@@ -317,3 +317,6 @@ class Placeholder:
     def __init__(self,y):
         self.y = y
 
+class User:
+    def __init__(self,text):
+        self.text = text
