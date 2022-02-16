@@ -1,9 +1,4 @@
 import socket
-import threading
-import errno
-
-from server import FORMAT
-
 class Client():
     def __init__(self, username, password):
         self.HEADER = 16
