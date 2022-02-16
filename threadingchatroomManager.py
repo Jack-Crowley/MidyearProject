@@ -70,6 +70,8 @@ class Chatroom:
                                 if button.click(mousex,mousey):
                                     print('exited')
                                     self.run = False
+                                    sending.exit()
+                                    recieving.exit()
                     if self.buttonsClicked == len(self.chatroomclickables):
                         self.active = None
                     self.buttonsClicked = 0
