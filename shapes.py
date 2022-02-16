@@ -189,11 +189,15 @@ class InputField:
             self.delChar()
     
     def letter(self,char):
+        keys = pygame.key.get_pressed()
         self.lettercounter[char] += 0.05*self.lettervelocity[char]
         if self.lettercounter[char] > 1:
             self.lettercounter[char] = 0
             self.lettervelocity[char] += 0.5
-            self.addChar(char)
+            if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
+                self.addChar(char.upper())
+            else:
+                self.addChar(char)
 
     def left(self):
         self.leftarrowcount += 0.07*self.leftarrowvelocity
@@ -276,27 +280,29 @@ class messageObject:
         self.size = size/pixelratio
         self.bordercolor = bordercolor
         self.font = pygame.font.SysFont("Orbitron", int(self.size))
-        self.messages = [self.font.render(self.username, False, (2,217,168))]
+        self.newfont = pygame.font.SysFont("Orbitron", 2)
+        self.messages = [self.font.render(" "+self.username, False, (2,217,168))]
         self.load_message()
         self.height = 64/pixelratio+(35/pixelratio*(len(self.messages)-2))
         self.relativey = self.height
         self.y=y/pixelratio
         self.linecount = len(self.messages)
         self.visible = True
+
     
     def draw(self):
-        pygame.draw.rect(self.window,self.bordercolor,(self.x,self.y-self.indepenty,self.width,self.height),1,1)
+        pygame.draw.rect(self.window,self.bordercolor,(self.x,self.y-self.indepenty,self.width,self.height),2,2)
         for i in range(len(self.messages)):
-            self.window.blit(self.messages[i],(self.x,self.y+(i*self.size)-self.indepenty))
+            self.window.blit(self.messages[i],(self.x,self.y+(i*self.size)-self.indepenty+5))
 
     def load_message(self):
-        tempMessage = ""
+        tempMessage = " "
         for i in range(len(self.text)):
             tempMessage += self.text[i]
             self.textObject = self.font.render(tempMessage, False, (255,255,255))
             if self.textObject.get_width() > self.width-20:
                 self.messages.append(self.textObject)
-                tempMessage = ""
+                tempMessage = " "
         self.messages.append(self.font.render(tempMessage, False, (255,255,255)))
 
     def ChangeVis(self, newThing):

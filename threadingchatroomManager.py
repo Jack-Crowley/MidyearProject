@@ -169,6 +169,9 @@ class Chatroom:
     def newMessage(self):
         newtext = self.active.getStr()
         a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,self.username,newtext,30, (193,146,252))
+        if len(self.chatroommessages) != 0:
+            print("true")
+            a.indepenty = self.chatroommessages[-1].indepenty
         for i in self.chatroommessages:
             i.indepenty += a.height/self.pixelratio
             i.relativey += a.height/self.pixelratio
@@ -182,6 +185,9 @@ class Chatroom:
 
     def createNewMessage(self,username,msg):
         a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,username,msg,30, (2,217,198))
+        if len(self.chatroommessages) != 0:
+            print("true")
+            a.indepenty = self.chatroommessages[-1].indepenty
         for i in self.chatroommessages:
             i.indepenty += a.height/self.pixelratio
             i.relativey += a.height/self.pixelratio
