@@ -8,8 +8,6 @@ class Chatroom:
         self.clock = clock
         self.pixelratio = pixelratio
 
-        print(self.pixelratio)
-
         self.validChars = validChars
 
         self.miny = -200

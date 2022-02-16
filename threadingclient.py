@@ -2,6 +2,8 @@ import socket
 import threading
 import errno
 
+from server import FORMAT
+
 class Client():
     def __init__(self, username, password):
         self.HEADER = 16
@@ -12,6 +14,7 @@ class Client():
         self.msg = ""
         self.messageQueue = []
         self.recievingQueue = []
+        self.userList = []
 
         self.my_username = username
 
@@ -25,7 +28,6 @@ class Client():
     def send_message(self, msg):
         while True:
             if self.messageQueue != []:
-                print(self.messageQueue)
                 msg = self.messageQueue[0]
                 del(self.messageQueue[0])
             else:
@@ -43,11 +45,18 @@ class Client():
             try:
                 username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
                 username_length = int(username_header.strip())
+                print(username_length)
                 username = self.client_socket.recv(username_length).decode(self.FORMAT)
+                print(username)
                 message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
                 message_length = int(message_header.strip())
                 message = self.client_socket.recv(message_length).decode(self.FORMAT)
+                print(message)
                 self.recievingQueue.append([username, message])
+                userListLen = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
+                userList = self.client_socket.recv(userListLen).decode(self.FORMAT)
+                userList = userList.split(":")
+                self.userList = userList[0:]
             except:
                 pass
         

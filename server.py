@@ -13,10 +13,14 @@ server_socket.bind(ADDR)
 
 sockets_list = [server_socket]
 clients = {}
+userList = []
 
 with open('nothing.txt') as data: nstring = data.read().strip()
 
 def handle_client(conn, addr):
+
+    global userList
+
     print(f"[NEW CONNECTION] {addr} connected.")
 
     try:
@@ -24,6 +28,7 @@ def handle_client(conn, addr):
         message_length = msg_len.decode(FORMAT)
         message_length = int(message_length)
         user = {'header': message_length, 'data': conn.recv(message_length).decode(FORMAT)}
+        userList.append(user['data'])
         print(user['data'])
     except:
         print('unable to get username')
@@ -50,6 +55,9 @@ def handle_client(conn, addr):
                                     client_socket.send(split_msg[1].encode(FORMAT))
                                     client_socket.send(split_msg[2].encode(FORMAT))
                                     client_socket.send(''.join(split_msg[3:]).encode(FORMAT))
+                                    joinedUserList = ':'.join(userList)
+                                    client_socket.send(f"{len(joinedUserList):<{HEADER}}".encode(FORMAT))
+                                    client_socket.send(joinedUserList.encode(FORMAT))
                                     del clients[client_socket][0]
                                 except:
                                     ignoreDisconnected.append(client_socket)
@@ -65,6 +73,9 @@ def handle_client(conn, addr):
                         client_socket.send(split_msg[1].encode(FORMAT))
                         client_socket.send(split_msg[2].encode(FORMAT))
                         client_socket.send(''.join(split_msg[3:]).encode(FORMAT))
+                        joinedUserList = ':'.join(userList)
+                        client_socket.send(f"{len(joinedUserList):<{HEADER}}".encode(FORMAT))
+                        client_socket.send(joinedUserList.encode(FORMAT))
                         del clients[conn][0]
                     else:
                         conn.send(nstring.encode(FORMAT))
