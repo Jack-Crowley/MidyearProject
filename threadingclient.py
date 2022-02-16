@@ -19,11 +19,8 @@ class Client():
         self.client_socket.connect(self.ADDR)
 
         self.username = self.my_username.encode(self.FORMAT)
-        print(self.username)
         self.username_header = f"{len(self.username):<{self.HEADER}}".encode(self.FORMAT)
-        print(self.username_header)
         self.client_socket.send(self.username_header+self.username)
-        print(self.username_header+self.username)
 
     def send_message(self, msg):
         while True:
