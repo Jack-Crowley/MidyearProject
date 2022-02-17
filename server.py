@@ -84,6 +84,7 @@ def handle_client(conn, addr):
         except:
             connected = False
     
+    userList.remove(user['data'])
     conn.close()
 
 def start():
@@ -93,6 +94,8 @@ def start():
         conn, addr = server_socket.accept()
         clients[conn] = []
         print('Accepted new connection from {}:{}'.format(*addr))
+        for i in [i for i in clients.keys()]:
+            i.send("users::"+userList)
         thread = threading.Thread(target = handle_client, args = (conn, addr))
         thread.start()
         print(f'[ACTIVE CONNECTIONS] {threading.active_count() -1}')

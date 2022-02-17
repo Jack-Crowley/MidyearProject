@@ -82,7 +82,7 @@ class InputField:
     def click(self,mx,my):
         if self.x <= mx <= self.x+self.width and self.y <= my <= self.y+self.height+(self.size*self.linecount):
             return True
-        return 
+        return False
     
     def changeText(self):
         if self.mode == "scroll":
@@ -320,3 +320,6 @@ class Placeholder:
 class User:
     def __init__(self,text):
         self.text = text
+        self.image = pygame.image.load("https://github.com/Jack-Crowley/MidyearProject/blob/main/Images/person_outline.png")
+        self.image = pygame.transform.scale(self.image, (int(self.width),int(self.height)))
+    

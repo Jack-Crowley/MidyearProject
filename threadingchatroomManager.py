@@ -59,13 +59,13 @@ class Chatroom:
                             if button.command == "input_field":
                                     button.deactivate()
                                     button.active = False
-                                    button.color = (17,17,17)
+                                    button.color = (35,35,35)
                                     if button.click(mousex,mousey):
                                         self.buttonsClicked -= 1
                                         button.activate()
                                         self.active = button
                                         button.active = True
-                                        button.color = (35,35,35)                       
+                                        button.color = (50,50,50)                       
                             if button.command == "exit":
                                 if button.click(mousex,mousey):
                                     print('exited')
@@ -151,7 +151,7 @@ class Chatroom:
         self.chatroomdrawables.append(Text("Orbitron",(193,146,252),"USERS",self.window,200,175,self.pixelratio,75))
         self.chatroomdrawables.append(Rectangle(75,200,250,10,(193,146,252),self.window,self.pixelratio))
         self.chatroomdrawables.append(Rectangle(450,1000,1000,80,(27,27,27),self.window,self.pixelratio))
-        self.createInputField(450,990,1000,40,(27,27,27),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,40)
+        self.createInputField(450,990,1000,40,(35,35,35),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,40)
         self.createButton(1880,0,40,40,(0,0,0),self.window,self.pixelratio,"exit")
 
     def createInputField(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size):
