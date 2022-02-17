@@ -38,9 +38,9 @@ class Chatroom:
         self.buttonsClicked = 0
 
         msg = ""
-        sending = threading.Thread(target = self.client.send_message, args = (msg,))
+        sending = threading.Thread(target = self.client.send_message, args = (msg,), daemon = True)
         sending.start()
-        recieving = threading.Thread(target = self.client.recieve_message, args = ())
+        recieving = threading.Thread(target = self.client.recieve_message, args = (), daemon = True)
         recieving.start()
 
         while self.run:
@@ -70,8 +70,6 @@ class Chatroom:
                                 if button.click(mousex,mousey):
                                     print('exited')
                                     self.run = False
-                                    sending.exit()
-                                    recieving.exit()
                     if self.buttonsClicked == len(self.chatroomclickables):
                         self.active = None
                     self.buttonsClicked = 0

@@ -39,16 +39,18 @@ class Client():
         while True:
             try:
                 username_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-                username_length = int(username_header.strip())
-                username = self.client_socket.recv(username_length).decode(self.FORMAT)
-                message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-                message_length = int(message_header.strip())
-                message = self.client_socket.recv(message_length).decode(self.FORMAT)
-                self.recievingQueue.append([username, message])
-                userListLen = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
-                userList = self.client_socket.recv(userListLen).decode(self.FORMAT)
-                userList = userList.split(":")
-                self.userList = userList[0:]
+                if username_header.split()[0] != 'userlist':
+                    username_length = int(username_header.strip())
+                    username = self.client_socket.recv(username_length).decode(self.FORMAT)
+                    message_header = self.client_socket.recv(self.HEADER).decode(self.FORMAT)
+                    message_length = int(message_header.strip())
+                    message = self.client_socket.recv(message_length).decode(self.FORMAT)
+                    self.recievingQueue.append([username, message])
+                else:
+                    userListLen = int(username_header.split()[1].strip())
+                    userList = self.client_socket.recv(userListLen).decode(self.FORMAT)
+                    userList = userList.split(":")
+                    self.userList = userList[0:]
             except:
                 pass
         

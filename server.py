@@ -73,10 +73,6 @@ def handle_client(conn, addr):
                         client_socket.send(split_msg[1].encode(FORMAT))
                         client_socket.send(split_msg[2].encode(FORMAT))
                         client_socket.send(''.join(split_msg[3:]).encode(FORMAT))
-                        joinedUserList = ':'.join(userList)
-                        client_socket.send(f"{len(joinedUserList):<{HEADER}}".encode(FORMAT))
-                        client_socket.send(joinedUserList.encode(FORMAT))
-                        del clients[conn][0]
                     else:
                         conn.send(nstring.encode(FORMAT))
             else:
@@ -85,6 +81,7 @@ def handle_client(conn, addr):
             connected = False
     
     userList.remove(user['data'])
+    del clients[conn]
     conn.close()
 
 def start():
@@ -94,8 +91,10 @@ def start():
         conn, addr = server_socket.accept()
         clients[conn] = []
         print('Accepted new connection from {}:{}'.format(*addr))
-        for i in [i for i in clients.keys()]:
-            i.send("users::"+userList)
+        joinedUserList = ':'.join(userList)
+        for client in clients.keys():
+            client.send(f"{'userlist      '+str(len(joinedUserList)):<{HEADER}}".encode(FORMAT))
+            client.send(joinedUserList.encode(FORMAT))
         thread = threading.Thread(target = handle_client, args = (conn, addr))
         thread.start()
         print(f'[ACTIVE CONNECTIONS] {threading.active_count() -1}')
