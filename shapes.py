@@ -132,7 +132,7 @@ class InputField:
                 self.maxCurrentIndex += 1
                 self.changeText()
         else:
-            if len(self.textMessage) <= 16:
+            if len(self.textMessage) <= 10:
                 self.textMessage = self.textMessage[:self.cursorIndex] + char + self.textMessage[self.cursorIndex:]
                 self.cursorIndex+=1
                 self.maxCurrentIndex += 1
