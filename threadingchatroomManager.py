@@ -23,6 +23,7 @@ class Chatroom:
         self.chatroomclickables = []
         self.chatroomdrawables = []
         self.chatroommessages = []
+        self.userslist = []
         self.loadDrawables()
 
         self.run = True
@@ -134,10 +135,12 @@ class Chatroom:
             self.draw()
     
     def draw(self):
+        self.updateUserList()
         mousex,mousey = pygame.mouse.get_pos()
         self.window.fill((27,27,27))
         for i in self.chatroommessages:  i.draw()
         for i in self.chatroomdrawables: i.draw()
+        for i in self.userslist: i.draw()
         if 1880/self.pixelratio <= mousex and 0 <= mousey <= 40/self.pixelratio:
             self.window.blit(self.exitButtons[1], (1880/self.pixelratio,0))
         else:
@@ -151,9 +154,15 @@ class Chatroom:
         self.chatroomdrawables.append(Text("Orbitron",(193,146,252),"USERS",self.window,200,175,self.pixelratio,75))
         self.chatroomdrawables.append(Rectangle(75,200,250,10,(193,146,252),self.window,self.pixelratio))
         self.chatroomdrawables.append(Rectangle(450,1000,1000,80,(27,27,27),self.window,self.pixelratio))
-        self.chatroomdrawables.append(User(self.client.my_username, self.window))
         self.createInputField(450,990,1000,40,(35,35,35),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,40)
         self.createButton(1880,0,40,40,(0,0,0),self.window,self.pixelratio,"exit")
+        
+    def updateUserList(self):
+        print(self.client.userList)
+        self.userslist = []
+        for i in self.client.userList:
+            for x in self.userslist: x.y += 150
+            self.userslist.append(User(i, self.window))
 
     def createInputField(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size):
         tempInputField = InputField(x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size)

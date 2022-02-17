@@ -324,9 +324,9 @@ class User:
         self.y = 250
         self.image = pygame.transform.scale(self.image, (100,100))
         self.name = name
-        self.font = pygame.font.SysFont("Orbitron", 30)
+        self.font = pygame.font.SysFont("Orbitron", 40)
         self.textObject = self.font.render(self.name, False, (193,146,252))
 
     def draw(self):
-        self.window.blit(self.textObject,(160,self.y+50-15))
+        self.window.blit(self.textObject,(160,self.y+30))
         self.window.blit(self.image, (50,self.y))
