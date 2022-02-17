@@ -32,6 +32,11 @@ def handle_client(conn, addr):
         print(user['data'])
     except:
         print('unable to get username')
+
+    joinedUserList = ':'.join(userList)
+    for client in clients.keys():
+        client.send(f"{'userlist      '+str(len(joinedUserList)):<{HEADER}}".encode(FORMAT))
+        client.send(joinedUserList.encode(FORMAT))
     
     sockets_list.append(conn)
     ignoreDisconnected = []
@@ -55,9 +60,6 @@ def handle_client(conn, addr):
                                     client_socket.send(split_msg[1].encode(FORMAT))
                                     client_socket.send(split_msg[2].encode(FORMAT))
                                     client_socket.send(''.join(split_msg[3:]).encode(FORMAT))
-                                    joinedUserList = ':'.join(userList)
-                                    client_socket.send(f"{len(joinedUserList):<{HEADER}}".encode(FORMAT))
-                                    client_socket.send(joinedUserList.encode(FORMAT))
                                     del clients[client_socket][0]
                                 except:
                                     ignoreDisconnected.append(client_socket)
@@ -91,10 +93,6 @@ def start():
         conn, addr = server_socket.accept()
         clients[conn] = []
         print('Accepted new connection from {}:{}'.format(*addr))
-        joinedUserList = ':'.join(userList)
-        for client in clients.keys():
-            client.send(f"{'userlist      '+str(len(joinedUserList)):<{HEADER}}".encode(FORMAT))
-            client.send(joinedUserList.encode(FORMAT))
         thread = threading.Thread(target = handle_client, args = (conn, addr))
         thread.start()
         print(f'[ACTIVE CONNECTIONS] {threading.active_count() -1}')
