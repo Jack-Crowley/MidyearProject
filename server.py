@@ -55,9 +55,6 @@ def handle_client(conn, addr):
                                     client_socket.send(split_msg[1].encode(FORMAT))
                                     client_socket.send(split_msg[2].encode(FORMAT))
                                     client_socket.send(''.join(split_msg[3:]).encode(FORMAT))
-                                    joinedUserList = ':'.join(userList)
-                                    client_socket.send(f"{len(joinedUserList):<{HEADER}}".encode(FORMAT))
-                                    client_socket.send(joinedUserList.encode(FORMAT))
                                     del clients[client_socket][0]
                                 except:
                                     ignoreDisconnected.append(client_socket)
