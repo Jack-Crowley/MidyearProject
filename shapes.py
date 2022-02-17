@@ -132,10 +132,11 @@ class InputField:
                 self.maxCurrentIndex += 1
                 self.changeText()
         else:
-            self.textMessage = self.textMessage[:self.cursorIndex] + char + self.textMessage[self.cursorIndex:]
-            self.cursorIndex+=1
-            self.maxCurrentIndex += 1
-            self.changeText()
+            if len(self.textMessage) <= 16:
+                self.textMessage = self.textMessage[:self.cursorIndex] + char + self.textMessage[self.cursorIndex:]
+                self.cursorIndex+=1
+                self.maxCurrentIndex += 1
+                self.changeText()
 
     def moveCursorLeft(self):
         if self.cursorIndex > 0:
@@ -289,7 +290,6 @@ class messageObject:
         self.linecount = len(self.messages)
         self.visible = True
 
-    
     def draw(self):
         pygame.draw.rect(self.window,self.bordercolor,(self.x,self.y-self.indepenty,self.width,self.height),2,2)
         for i in range(len(self.messages)):
@@ -318,8 +318,15 @@ class Placeholder:
         self.y = y
 
 class User:
-    def __init__(self,text):
-        self.text = text
-        self.image = pygame.image.load("https://github.com/Jack-Crowley/MidyearProject/blob/main/Images/person_outline.png")
-        self.image = pygame.transform.scale(self.image, (int(self.width),int(self.height)))
-    
+    def __init__(self, name, window):
+        self.window = window
+        self.image = pygame.image.load("Images\person_outline.png")
+        self.y = 250
+        self.image = pygame.transform.scale(self.image, (100,100))
+        self.name = name
+        self.font = pygame.font.SysFont("Orbitron", 30)
+        self.textObject = self.font.render(self.name, False, (193,146,252))
+
+    def draw(self):
+        self.window.blit(self.textObject,(160,self.y+50-15))
+        self.window.blit(self.image, (50,self.y))

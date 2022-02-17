@@ -28,6 +28,7 @@ username = login.username.textMessage
 password = login.password.textMessage
 
 client = Client(username,password)
+print('connected')
 
 Chatroom(window,clock,pixelratio,validChars,client, username)
 pygame.display.quit()
