@@ -10,6 +10,7 @@ class Register:
 
         self.username = None
         self.password = None
+        self.confPass = None
 
         self.pixelratio = pixelratio
 
@@ -43,7 +44,7 @@ class Register:
                                     self.run = False
                         elif button.command == "register":
                             if button.click(mousex, mousey):
-                                self.run = False
+                                self.registerAccount(self.username.textMessage)
                 if self.active != None:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_BACKSPACE:
