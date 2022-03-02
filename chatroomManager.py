@@ -1,17 +1,12 @@
 import pygame
+import threading
 from shapes import *
 class Chatroom:
-    def __init__(self, window, clock, pixelratio,validChars,client, nstring, username):
+    def __init__(self, window, clock, pixelratio,validChars,client, username):
         self.window = window
 
         self.clock = clock
         self.pixelratio = pixelratio
-
-        self.nstring = nstring
-
-        print(self.pixelratio)
-
-        self.messageQueue = []
 
         self.validChars = validChars
 
@@ -28,6 +23,7 @@ class Chatroom:
         self.chatroomclickables = []
         self.chatroomdrawables = []
         self.chatroommessages = []
+        self.userslist = []
         self.loadDrawables()
 
         self.run = True
@@ -42,15 +38,17 @@ class Chatroom:
 
         self.buttonsClicked = 0
 
+        msg = ""
+        sending = threading.Thread(target = self.client.send_message, args = (msg,), daemon = True)
+        sending.start()
+        recieving = threading.Thread(target = self.client.recieve_message, args = (), daemon = True)
+        recieving.start()
+
         while self.run:
-            if self.messageQueue != []:
-                msg = client.send_message(self.messageQueue[0])
-                del(self.messageQueue[0])
-            else:
-                msg = client.send_message(nstring)
-            if msg != 0:
-                self.createNewMessage(msg[0],''.join(msg[1:]))
             self.clock.tick(60)
+            if len(self.client.recievingQueue) != 0:
+                self.createNewMessage(self.client.recievingQueue[0][0], self.client.recievingQueue[0][1])
+                del self.client.recievingQueue[0]
             mousex,mousey = pygame.mouse.get_pos()
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
@@ -62,13 +60,13 @@ class Chatroom:
                             if button.command == "input_field":
                                     button.deactivate()
                                     button.active = False
-                                    button.color = (17,17,17)
+                                    button.color = (35,35,35)
                                     if button.click(mousex,mousey):
                                         self.buttonsClicked -= 1
                                         button.activate()
                                         self.active = button
                                         button.active = True
-                                        button.color = (35,35,35)                       
+                                        button.color = (50,50,50)                       
                             if button.command == "exit":
                                 if button.click(mousex,mousey):
                                     print('exited')
@@ -137,10 +135,12 @@ class Chatroom:
             self.draw()
     
     def draw(self):
+        self.updateUserList()
         mousex,mousey = pygame.mouse.get_pos()
         self.window.fill((27,27,27))
         for i in self.chatroommessages:  i.draw()
         for i in self.chatroomdrawables: i.draw()
+        for i in self.userslist: i.draw()
         if 1880/self.pixelratio <= mousex and 0 <= mousey <= 40/self.pixelratio:
             self.window.blit(self.exitButtons[1], (1880/self.pixelratio,0))
         else:
@@ -154,8 +154,15 @@ class Chatroom:
         self.chatroomdrawables.append(Text("Orbitron",(193,146,252),"USERS",self.window,200,175,self.pixelratio,75))
         self.chatroomdrawables.append(Rectangle(75,200,250,10,(193,146,252),self.window,self.pixelratio))
         self.chatroomdrawables.append(Rectangle(450,1000,1000,80,(27,27,27),self.window,self.pixelratio))
-        self.createInputField(450,990,1000,40,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,40)
+        self.createInputField(450,990,1000,40,(35,35,35),self.window,self.pixelratio,"input_field",(2,217,198),"wrap","Enter Text Here...",(193,146,252),self.validChars,40)
         self.createButton(1880,0,40,40,(0,0,0),self.window,self.pixelratio,"exit")
+        
+    def updateUserList(self):
+        print(self.client.userList)
+        self.userslist = []
+        for i in self.client.userList:
+            for x in self.userslist: x.y += 150
+            self.userslist.append(User(i, self.window))
 
     def createInputField(self,x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size):
         tempInputField = InputField(x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size)
@@ -170,6 +177,9 @@ class Chatroom:
     def newMessage(self):
         newtext = self.active.getStr()
         a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,self.username,newtext,30, (193,146,252))
+        if len(self.chatroommessages) != 0:
+            print("true")
+            a.indepenty = self.chatroommessages[-1].indepenty
         for i in self.chatroommessages:
             i.indepenty += a.height/self.pixelratio
             i.relativey += a.height/self.pixelratio
@@ -183,6 +193,9 @@ class Chatroom:
 
     def createNewMessage(self,username,msg):
         a = messageObject(450,self.textboxy,1000,(255,255,255),self.window,self.pixelratio,username,msg,30, (2,217,198))
+        if len(self.chatroommessages) != 0:
+            print("true")
+            a.indepenty = self.chatroommessages[-1].indepenty
         for i in self.chatroommessages:
             i.indepenty += a.height/self.pixelratio
             i.relativey += a.height/self.pixelratio
@@ -192,7 +205,7 @@ class Chatroom:
 
     def send(self):
         newtext = self.active.getStr()
-        self.messageQueue.append(newtext)
+        self.client.messageQueue.append(newtext)
 
     def moveBox(self, num):
         for i in self.chatroommessages:
