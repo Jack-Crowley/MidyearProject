@@ -3,7 +3,7 @@ class Client():
     def __init__(self, username, password):
         self.HEADER = 16
         self.PORT = 9000
-        self.IP = "52.22.56.130"
+        self.IP = "3.222.3.116"
         self.ADDR = (self.IP, self.PORT)
         self.FORMAT = 'utf-8'
         self.msg = ""
