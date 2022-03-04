@@ -45,7 +45,7 @@ class Chatroom:
         recieving.start()
 
         while self.run:
-            self.clock.tick(60)
+            self.clock.tick(25)
             if len(self.client.recievingQueue) != 0:
                 self.createNewMessage(self.client.recievingQueue[0][0], self.client.recievingQueue[0][1])
                 del self.client.recievingQueue[0]

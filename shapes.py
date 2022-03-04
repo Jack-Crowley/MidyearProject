@@ -1,4 +1,3 @@
-from pyexpat.errors import messages
 import pygame
 
 class Rectangle:
@@ -126,7 +125,7 @@ class InputField:
 
     def addChar(self,char):
         if self.mode == "wrap":
-            if self.linecount <= 12:
+            if self.linecount <= 3:
                 self.textMessage = self.textMessage[:self.cursorIndex] + char + self.textMessage[self.cursorIndex:]
                 self.cursorIndex+=1
                 self.maxCurrentIndex += 1
@@ -183,7 +182,7 @@ class InputField:
         self.changeText()
     
     def backspace(self):
-        self.backspacecounter += 0.1*self.backspacevelocity
+        self.backspacecounter += 0.2*self.backspacevelocity
         if self.backspacecounter > 1:
             self.backspacecounter = 0
             self.backspacevelocity += 0.5
@@ -191,7 +190,7 @@ class InputField:
     
     def letter(self,char):
         keys = pygame.key.get_pressed()
-        self.lettercounter[char] += 0.05*self.lettervelocity[char]
+        self.lettercounter[char] += 0.15*self.lettervelocity[char]
         if self.lettercounter[char] > 1:
             self.lettercounter[char] = 0
             self.lettervelocity[char] += 0.5
@@ -259,7 +258,6 @@ class Text:
         self.textObject = self.newText.render(self.message, False, self.color)
         self.x=x/self.pixel-(self.textObject.get_width()/2)
         self.y=y/self.pixel-(self.textObject.get_height()/2)
-        
     
     def draw(self):
         self.window.blit(self.textObject,(self.x,self.y))

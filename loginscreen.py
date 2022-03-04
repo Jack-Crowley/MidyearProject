@@ -1,5 +1,4 @@
 import pygame
-import os
 import hashlib
 from shapes import *
 
@@ -34,7 +33,7 @@ class Login:
         self.active = None
         self.run = True
         while self.run:
-            self.clock.tick(60)
+            self.clock.tick(24)
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -114,10 +113,11 @@ class Login:
     def loadDrawables(self):
         self.drawables.append(Rectangle(0,0,1920,192,(17,17,17),self.window,self.pixelratio))
         self.drawables.append(Rectangle(576,300,768,700,(17,17,17),self.window,self.pixelratio))
-        self.drawables.append(Text("Orbitron",(193,146,252),"PERMEABILITY",self.window,1067,96,self.pixelratio,192))
+        self.drawables.append(Text("Orbitron",(193,146,252),"TRINITY",self.window,951.75,96,self.pixelratio,192))
         self.drawables.append(Text("Orbitron",(2,217,198),"LOG IN TO CONTINUE",self.window,960,350,self.pixelratio,75))
         self.drawables.append(Rectangle(726,550,468,15,(2,217,198),self.window,self.pixelratio))
-        self.drawables.append(Image("Images\purple_log_header.png",390,10,150,150,self.window,self.pixelratio))
+        self.drawables.append(Image("Images\purple_log_header.png",495,10,150,150,self.window,self.pixelratio))
+        self.drawables.append(Image("Images\purple_log_header.png",1257,10,150,150,self.window,self.pixelratio))
         self.createInputField(726,475,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"scroll","Enter Username...",(193,146,252),self.validChars,75)
 
         self.createInputField(726,600,468,75,(17,17,17),self.window,self.pixelratio,"input_field",(2,217,198),"password","Enter Password...",(193,146,252),self.validChars,75)
