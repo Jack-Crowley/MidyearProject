@@ -1,5 +1,7 @@
 import pygame
 from shapes import *
+import os
+import hashlib
 
 class Register:
     def __init__(self,window,clock,pixelratio,validChars):
@@ -44,7 +46,9 @@ class Register:
                                     self.run = False
                         elif button.command == "register":
                             if button.click(mousex, mousey):
-                                self.registerAccount(self.username.textMessage)
+                                if self.registerAccount(self.username.textMessage, self.password.textMessage, 'stillbad'):#self.confPass.textMessage):
+                                    button.command = 'new_screen'
+                                    self.run = False
                 if self.active != None:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_BACKSPACE:
@@ -79,7 +83,23 @@ class Register:
                     
             
             self.draw()
-        
+    
+    def registerAccount(self, username, password, conf_pw):
+        print(username, password)
+        if password == conf_pw:
+            with open('accounts.txt', 'r+') as accs:
+                accounts = {}
+                for line in accs:
+                    line = line.split(';')
+                    accounts[line[0]] = line[1].strip()
+                if username not in accounts.keys():
+                    salt = b'jackbad'
+                    plaintext = password.encode()
+                    digest = hashlib.pbkdf2_hmac('sha256', plaintext, salt, 10000)
+                    accs.write(f'\n{username};{digest.hex()};{password}')
+                    return True
+        return False
+
     def loadDrawables(self):
         self.drawables.append(Rectangle(0,0,1920,192,(17,17,17),self.window,self.pixelratio))
         self.drawables.append(Rectangle(576,300,768,700,(17,17,17),self.window,self.pixelratio))
