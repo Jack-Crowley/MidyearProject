@@ -24,9 +24,10 @@ class Register:
         self.active = None
         self.run = True
         while self.run:
-            self.clock.tick(60)
+            self.clock.tick(24)
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
+                print(self.username.textMessage)
                 if event.type == pygame.QUIT:
                     self.run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -46,7 +47,7 @@ class Register:
                                     self.run = False
                         elif button.command == "register":
                             if button.click(mousex, mousey):
-                                if self.registerAccount(self.username.textMessage, self.password.textMessage, 'stillbad'):#self.confPass.textMessage):
+                                if self.registerAccount(self.username.textMessage, self.password.textMessage, self.confPass.textMessage):
                                     button.command = 'new_screen'
                                     self.run = False
                 if self.active != None:
@@ -131,9 +132,13 @@ class Register:
         tempInputField = InputField(x,y,width,height,color,window,pixelratio,command,textcolor,mode,emptyMessage,cursorColor,validChars,size)
         self.drawables.append(tempInputField)
         self.clickables.append(tempInputField)
-        if y == 600:
+        print(emptyMessage)
+        if emptyMessage == "Enter Password...":
             self.password = tempInputField
+        elif emptyMessage == "Confirm Password...":
+            self.confPass = tempInputField
         else:
+            print("created username", emptyMessage)
             self.username = tempInputField
 
 
