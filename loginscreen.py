@@ -103,7 +103,7 @@ class Login:
             self.draw()
     
     def checkLogin(self, username, password):
-        if accounts[username]:
+        if username in accounts.keys():
             salt = b'jackbad'
             plaintext = password.encode()
             digest = hashlib.pbkdf2_hmac('sha256', plaintext, salt, 10000)
