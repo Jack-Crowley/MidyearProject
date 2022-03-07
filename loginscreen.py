@@ -2,13 +2,6 @@ import pygame
 import hashlib
 from shapes import *
 
-with open('accounts.txt') as accs:
-    accounts = {}
-    for line in accs:
-        line = line.split(';')
-        accounts[line[0]] = line[1].strip()
-    accs.close()
-
 class Login:
     def __init__(self,window,clock,pixelratio,validChars):
         
@@ -103,6 +96,12 @@ class Login:
             self.draw()
     
     def checkLogin(self, username, password):
+        with open('accounts.txt') as accs:
+            accounts = {}
+            for line in accs:
+                line = line.split(';')
+                accounts[line[0]] = line[1].strip()
+            accs.close()
         if username in accounts.keys():
             salt = b'jackbad'
             plaintext = password.encode()
