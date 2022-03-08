@@ -4,7 +4,7 @@ Trinity is a messaging application which allows multiple users to wirelessly con
 * If you have any issues with the project, please go to https://github.com/Jack-Crowley/MidyearProject/issues for bug reports
 
 # Requirements
-Trinity is currently only avaiable on PC/Laptops, however no additional libraries or modeules are need to run this program.
+Trinity is currently only avaiable on PC/Laptops, however no additional libraries or modules are need to run this program.
 
 # Installation
 Click this link to be brought to the download page: https://github.com/Jack-Crowley/MidyearProject/releases/tag/1.0.
