@@ -25,12 +25,17 @@ class Login:
         self.loadDrawables()
         self.active = None
         self.run = True
+        self.exit = False
+        self.exitButtons = [pygame.transform.scale(pygame.image.load("Images\\x_black.png"), (int(40/self.pixelratio), int(40/self.pixelratio))), pygame.transform.scale(pygame.image.load("Images\\x.png"), (int(40/self.pixelratio), int(40/self.pixelratio)))]
+
         while self.run:
             self.clock.tick(24)
             keys = pygame.key.get_pressed()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.exit = True
                     self.run = False
+                    
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousex,mousey = pygame.mouse.get_pos()
                     for button in self.clickables:
@@ -56,6 +61,11 @@ class Login:
                             if button.click(mousex, mousey):
                                 if self.checkLogin(self.username.textMessage, self.password.textMessage):
                                     button.command = 'new_screen'
+                                    self.run = False
+                        elif button.command == "exit":
+                                if button.click(mousex,mousey):
+                                    print('exited')
+                                    self.exit = True
                                     self.run = False
                 if self.active != None:
                     if event.type == pygame.KEYDOWN:
@@ -128,6 +138,8 @@ class Login:
         self.createButton(726,855,468,75,(193,146,252),self.window,self.pixelratio,command="register")
         self.drawables.append(Text("Orbitron",(255,255,255), "REGISTER",self.window,960,892,self.pixelratio,75))
 
+        self.createButton(1880,0,40,40,(0,0,0),self.window,self.pixelratio,"exit")
+
     def createButton(self,x,y,width,height,color,window,pixelratio,command):
         tempButton = Button(x,y,width,height,color,window,pixelratio,command)
         self.drawables.append(tempButton)
@@ -145,6 +157,11 @@ class Login:
 
     def draw(self):
         self.window.fill((27,27,27))
+        mousex,mousey = pygame.mouse.get_pos()
         for i in self.drawables:
             i.draw()
+        if 1880/self.pixelratio <= mousex and 0 <= mousey <= 40/self.pixelratio:
+            self.window.blit(self.exitButtons[1], (1880/self.pixelratio,0))
+        else:
+            self.window.blit(self.exitButtons[0], (1880/self.pixelratio,0))
         pygame.display.update()
